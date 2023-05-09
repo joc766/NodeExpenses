@@ -1,0 +1,15 @@
+{
+  "name": "shared_expenses",
+  "version": "1.0.0",
+  "description": "Node version 1. Shared Expenses project version 2.o",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Jack O'Connor",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
