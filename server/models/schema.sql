@@ -1,9 +1,8 @@
 CREATE TABLE "Users" (
   "userId" integer PRIMARY KEY,
+  "email" varchar(40),
   "name" varchar(20),
-  "username" varchar(20) UNIQUE,
-  "debt" double(7,2),
-  "venmo" varchar(30),
+  "venmo" varchar(30) UNIQUE
 );
 
 CREATE TABLE "Groups" (
@@ -19,8 +18,9 @@ CREATE TABLE "User_Groups" (
 
 CREATE TABLE "Expenses" (
   "expenseId" integer PRIMARY KEY,
+  "expense_name" varchar(40),
   "amount" double(7,2),
-  "expense_name" text,
+  "description" text,
   "who_paid" integer,
   "num_shares" integer,
   "person_cost" double(7,2),
