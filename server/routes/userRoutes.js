@@ -110,7 +110,7 @@ router.post('/register', async (req, res) => {
 
     try {
         await addUser(user.uid, user.email, user.displayName, venmo);
-        response = res.json(user);
+        res.json(user);
     }
     catch (err) {
         console.log('Firebase Admin User Created, but not added to database.')
@@ -140,9 +140,5 @@ router.post('/delete/:uid', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
-
-
-
-
 
 module.exports = router;
