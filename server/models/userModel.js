@@ -54,12 +54,18 @@ async function payDebtor(userId, debtorId) {
   // AND Expenses.who_paid = :debtorId
   // AND Dues.userId = :userId;
 }
+
+async function deleteUser(uid) {
+  // TODO
+  // Query: DELETE FROM Users WHERE userId = :uid;
+}
   
 module.exports = {
   getUserById,
   getUserTransactions,
   getUserGroups,
   addUser,
-  payDebtor
+  payDebtor,
+  deleteUser
 };
   

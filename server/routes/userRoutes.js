@@ -1,6 +1,6 @@
 const express = require('express');
 const { admin } = require('../config/firebaseAdmin');
-const { getUserById, getUserTransactions, getUserGroups, addUser, payDebtor } = require('../models/userModel');
+const { getUserById, getUserTransactions, getUserGroups, addUser, payDebtor, deleteUser } = require('../models/userModel');
 
 const router = express.Router();
 
@@ -66,7 +66,7 @@ router.put('/:id/payAll/:debtorId', async (req, res) => {
     const debtorId = req.params.debtorId;
 
     try {
-        payDebtor(userId, debtorId);
+        await payDebtor(userId, debtorId);
     }
     catch (err) {
         console.log(err);
@@ -109,7 +109,7 @@ router.post('/register', async (req, res) => {
     }
 
     try {
-        addUser(user.uid, user.email, user.displayName, venmo);
+        await addUser(user.uid, user.email, user.displayName, venmo);
         response = res.json(user);
     }
     catch (err) {
@@ -128,6 +128,16 @@ router.post('/delete/:uid', async (req, res) => {
     }
     catch (err) {
         res.status(400).send(err.message);
+    }
+
+    try {
+        await deleteUser(uid);
+        res.status(200).send('OK');
+    }
+    catch (err) {
+        console.log('Firebase Admin User Deleted, but not removed from database.')
+        console.log(err)
+        res.status(500).send('Internal Server Error');
     }
 });
 
