@@ -1,38 +1,56 @@
-CREATE TABLE Groups (
-    id INTEGER NOT NULL PRIMARY KEY,
-    Group_name varchar(30) NOT NULL
+CREATE TABLE "Users" (
+  "userId" integer PRIMARY KEY,
+  "name" varchar(20),
+  "username" varchar(20) UNIQUE,
+  "debt" double(7,2),
+  "venmo" varchar(30),
 );
 
-CREATE TABLE Users (
-    id INTEGER NOT NULL PRIMARY KEY,
-    Name varchar(20),
-    Username varchar(20) UNIQUE,
-    Debt NUMERIC(7,2),
-    Venmo varchar(30),
-    groupID INTEGER NOT NULL,
-    Hash TEXT,
-    FOREIGN KEY(groupID) REFERENCES Groups(id)
+CREATE TABLE "Groups" (
+  "groupId" integer PRIMARY KEY,
+  "group_name" varchar(30) NOT NULL
 );
 
-CREATE TABLE Expenses (
-    id INTEGER NOT NULL PRIMARY KEY,
-    Amount DOUBLE(7,2),
-    Expense_name TEXT,
-    Who_paid INTEGER,
-    Num_shares INTEGER,
-    Person_cost DOUBLE(7,2),
-    Date DATE,
-    groupID INT NOT NULL,
-    FOREIGN KEY(groupID) REFERENCES Groups(id),
-    FOREIGN KEY(Who_paid) REFERENCES Users(id)
+CREATE TABLE "User_Groups" (
+  "userID" integer,
+  "groupID" integer,
+  PRIMARY KEY ("userID", "groupID")
 );
 
-CREATE TABLE Dues (
-    venmo TEXT NOT NULL,
-    expenseID INTEGER NOT NULL,
-    Shares DOUBLE(7,2) NOT NULL,
-    Paid BOOLEAN NOT NULL,
-    groupID INT NOT NULL,
-    FOREIGN KEY(groupID) REFERENCES Groups(id),
-    FOREIGN KEY(expenseID) REFERENCES Expenses(id)
+CREATE TABLE "Expenses" (
+  "expenseId" integer PRIMARY KEY,
+  "amount" double(7,2),
+  "expense_name" text,
+  "who_paid" integer,
+  "num_shares" integer,
+  "person_cost" double(7,2),
+  "date" date
 );
+
+CREATE TABLE "Group_Expenses" (
+  "groupID" integer,
+  "expenseID" integer,
+  PRIMARY KEY ("groupID", "expenseID")
+);
+
+CREATE TABLE "Dues" (
+  "expenseId" integer,
+  "userId" integer,
+  "shares" double(7,2) NOT NULL,
+  "paid" boolean NOT NULL,
+  PRIMARY KEY ("expenseId", "userId")
+);
+
+ALTER TABLE "User_Groups" ADD FOREIGN KEY ("userID") REFERENCES "Users" ("userId");
+
+ALTER TABLE "User_Groups" ADD FOREIGN KEY ("groupID") REFERENCES "Groups" ("groupId");
+
+ALTER TABLE "Expenses" ADD FOREIGN KEY ("who_paid") REFERENCES "Users" ("userId");
+
+ALTER TABLE "Group_Expenses" ADD FOREIGN KEY ("groupID") REFERENCES "Groups" ("groupId");
+
+ALTER TABLE "Group_Expenses" ADD FOREIGN KEY ("expenseID") REFERENCES "Expenses" ("expenseId");
+
+ALTER TABLE "Dues" ADD FOREIGN KEY ("expenseId") REFERENCES "Expenses" ("expenseId");
+
+ALTER TABLE "Dues" ADD FOREIGN KEY ("userId") REFERENCES "Users" ("userId");
