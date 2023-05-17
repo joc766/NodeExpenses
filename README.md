@@ -40,7 +40,8 @@ Shared Expenses v2 using PERN stack
     [
       {
         "id": 1,
-        "description": "Expense 1",
+        "title": "Groceries"
+        "description": "Bought apples, oranges, and bananas",
         "amount": 10.5,
         "paid": true
       },
@@ -303,8 +304,12 @@ Shared Expenses v2 using PERN stack
 
 - Creates a new expense.
 - Request Body:
-  - `description` (required) - The description of the expense.
-  - `amount` (required) - The amount of the expense.
+  - `title` (required)
+  - `description` (required) 
+  - `amount` (required)
+  - `n_shares` (required)
+  - `who_paid` (required) - the userID of the person who paid
+  - `date` (required)
 - Response:
   - `200 OK` on success
   - Example Response:
@@ -344,8 +349,5 @@ Shared Expenses v2 using PERN stack
 - Response:
   - `200 OK` on success
   - `404 Not Found` if the due with the given ID doesn't exist
-
-
-Please note that the above documentation assumes the usage of Express.js router and asynchronous functions for handling the endpoints.
 
 
