@@ -19,7 +19,7 @@ Shared Expenses v2 using PERN stack
   - Example Response:
     ```json
     {
-      "id": 1,
+      "userID": 1,
       "name": "John Doe",
       "email": "john@example.com",
       "venmo": "johndoe"
@@ -39,17 +39,22 @@ Shared Expenses v2 using PERN stack
     ```json
     [
       {
-        "id": 1,
-        "title": "Groceries"
-        "description": "Bought apples, oranges, and bananas",
-        "amount": 10.5,
-        "paid": true
+        "expoenseID": 1,
+        "title": "Groceries",
+        "amount": 25.00,
+        "descrip": "Bought apples, oranges, and bananas",
+        "who_paid": 1,
+        "n_shares": 5,
+        "date": 2022-05-15
       },
       {
-        "id": 2,
-        "description": "Expense 2",
-        "amount": 20.0,
-        "paid": false
+        "expoenseID": 2,
+        "title": "Hotel",
+        "amount": 500.00,
+        "descrip": "Security deposit only",
+        "who_paid": 2,
+        "n_shares": 5,
+        "date": 2022-05-11
       }
     ]
     ```
@@ -66,14 +71,12 @@ Shared Expenses v2 using PERN stack
     ```json
     [
       {
-        "id": 1,
+        "groupID": 1,
         "name": "Group 1",
-        "description": "Group 1 description"
       },
       {
-        "id": 2,
+        "groupID": 2,
         "name": "Group 2",
-        "description": "Group 2 description"
       }
     ]
     ```
@@ -89,9 +92,7 @@ Shared Expenses v2 using PERN stack
   - Example Response:
     ```json
     {
-      "id": 1,
-      "debtorId": 2,
-      "amount": 50.0
+      "debt": 52.00
     }
     ```
 
@@ -100,16 +101,14 @@ Shared Expenses v2 using PERN stack
 - Fetches debt information for a specific user and debtor.
 - Parameters:
   - `id` (required) - The ID of the user.
-  - `debtorId` (required) - The ID of the debtor.
+  - `debtorID` (required) - The ID of the debtor.
 - Response:
   - `200 OK` on success
   - `404 Not Found` if the user or debtor with the given IDs don't exist
   - Example Response:
     ```json
     {
-      "id": 1,
-      "debtorId": 2,
-      "amount": 50.0
+      "debt": 5.00
     }
     ```
 
@@ -118,7 +117,7 @@ Shared Expenses v2 using PERN stack
 - Pays all debt for a user to a specific debtor.
 - Parameters:
   - `id` (required) - The ID of the user.
-  - `debtorId` (required) - The ID of the debtor.
+  - `debtorID` (required) - The ID of the debtor.
 - Response:
   - `200 OK` on success
   - `404 Not Found` if the user or debtor with the given IDs don't exist
