@@ -1,6 +1,6 @@
 const express = require('express');
 const { admin } = require('../config/firebaseAdmin');
-const { getUserById, getUserTransactions, getUserGroups, addUser, payDebtor, deleteUser } = require('../models/userModel');
+const { getUser, getUserTransactions, getUserGroups, addUser, payDebtor, deleteUser } = require('../models/userModel');
 
 const router = express.Router();
 

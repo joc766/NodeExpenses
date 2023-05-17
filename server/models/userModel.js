@@ -1,6 +1,6 @@
 const pool = require('../config/db.js');
 
-async function getUserById(userId) {
+async function getUser(userId) {
   // const result = await pool.query(`SELECT * FROM Users WHERE id = :userId`, { userId });
   // userInfo = result.rows[0];
   // return userInfo;
@@ -39,7 +39,7 @@ async function deleteUser(uid) {
 }
   
 module.exports = {
-  getUserById,
+  getUser,
   getUserTransactions,
   getUserGroups,
   addUser,
