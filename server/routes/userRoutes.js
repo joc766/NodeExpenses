@@ -115,10 +115,25 @@ router.put('/:id/payAll/:debtorId', async (req, res) => {
 
 // POST REQUESTS
 
-router.post('/register', async (req, res) => {
-    const { name, username, email, password, venmo } = req.body;
+// THIS IS THE BETTER ROUTE IN TERMS OF SIMPLICITY. BELOW ROUTE SHOULD BE IMPLEMENTED TO FRONT-END
+router.post('/', async (req, res) => {
+    const { userID, email, name, venmo } = req.body
     try {
-      const user = await admin.auth().createUser({
+        const newUser = addUser(userID, email, name, venmo);
+        if (!newUser) {
+            res.status(500).send('Failed to create new user');
+        }
+    }
+    catch (err) {
+        console.log(err)
+        res.status(500).send('Internal Server Error')
+    }
+});
+
+router.post('/register', async (req, res) => {
+    const { name, email, password, venmo } = req.body;
+    try {
+      var user = await admin.auth().createUser({
         email: email,
         password: password,
         displayName: name,
@@ -144,8 +159,9 @@ router.post('/register', async (req, res) => {
     }
 });
 
-// TODO add permissions to this route
-router.post('/delete/:id', async (req, res) => {
+// DELETE ROUTES
+
+router.delete('/:id', async (req, res) => {
     const uid = req.params.id;
     try {
         await admin.auth().deleteUser(user.uid);

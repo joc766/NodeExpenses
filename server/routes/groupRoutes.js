@@ -1,5 +1,5 @@
 const express = require('express');
-const { getGroup, getGroupUsers, getGroupExpenses, addGroup, addGroupUser } = require('../models/groupModel');
+const { getGroup, getGroupUsers, getGroupExpenses, addGroup, addGroupUser, deleteGroup, deleteGroupUser } = require('../models/groupModel');
 
 const router = express.Router();
 
@@ -54,7 +54,8 @@ router.get('/:id/expenses', async (req, res) => {
 
 // One user will have to create a group, and then other users will get a shareable link to join the group
 // If user wants to add members at creation, they can choose their existing name but that will just send an email with link
-router.post('/register', async (req, res) => {
+// Contact through firebase??
+router.post('/', async (req, res) => {
     const { groupName, initialMembers } = req.body
     // TODO deal with emailing initialMembers
     try {
@@ -80,6 +81,30 @@ router.post(':id/addUser/:userId', async (req, res) => {
         return res.status(500).send('Internal Server Error')
     }
 });
+
+// DELETE ROUTES
+
+router.delete('/:id', async (req, res) => {
+    const groupID = req.params.id;
+    try {
+        await deleteGroup(gropuID);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+router.delete('/:id/removeUser:userID', async (req, res) => {
+    const { groupID, userID } = req.params;
+    try {
+        await deleteGroupUser(groupID, userID);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error')
+    }
+})
 
 
 module.exports = router

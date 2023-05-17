@@ -1,6 +1,8 @@
 const express = require('express');
 const { payDue } = require('../models/dueModel');
 
+const router = express.Router()
+
 router.put('/:id/pay', async (req, res) => {
     const dueId = req.params.id;
     try {
@@ -17,4 +19,4 @@ router.put('/:id/pay', async (req, res) => {
 })
 
 
-const router = express.Router()
+module.exports = router
