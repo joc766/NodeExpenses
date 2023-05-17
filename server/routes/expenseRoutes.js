@@ -7,9 +7,9 @@ const router = express.Router()
 // GET ROUTES
 
 router.get('/:id', async (req, res) => {
-    const expenseId = req.params.id;
+    const expenseID = req.params.id;
     try {
-        const expenseInfo = await getExpense(expenseId);
+        const expenseInfo = await getExpense(expenseID);
         if (!expenseInfo) {
             return res.status(404).send('Expense not found');
         }
@@ -22,9 +22,9 @@ router.get('/:id', async (req, res) => {
 });
 
 router.get('/:id/contributors', async (req, res) => {
-    const expenseId = req.params.id;
+    const expenseID = req.params.id;
     try {
-        const expenseContributors = await getExpenseContributors(expenseId);
+        const expenseContributors = await getExpenseContributors(expenseID);
         if (!expenseContributors) {
             return res.status(404).send('Expense not found');
         }

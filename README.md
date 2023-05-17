@@ -26,12 +26,12 @@ Shared Expenses v2 using PERN stack
     }
     ```
 
-#### GET /users/:id/transactions
+#### GET /users/:id/expenses
 
-- Fetches transactions for a specific user.
+- Fetches expenses for a specific user.
 - Parameters:
-  - `id` (required) - The ID of the user to retrieve transactions for.
-  - `unpaidOnly` (optional) - Retrieve only unpaid transactions (boolean).
+  - `id` (required) - The ID of the user to retrieve expenses for.
+  - `unpaidOnly` (optional) - Retrieve only unpaid expenses (boolean).
 - Response:
   - `200 OK` on success
   - `404 Not Found` if the user with the given ID doesn't exist
@@ -125,28 +125,21 @@ Shared Expenses v2 using PERN stack
 #### POST /users
 
 - Creates a new user.
+- Request: 
+  - Content-type: `application/json`
+  - Body parameters:
+    - `name`
+    - `email`
+    - `venmo`
 - Response:
   - `200 OK` on success
   - Example Response:
     ```json
     {
-      "id": 3,
+      "userID": 3,
       "name": "Alice Smith",
-      "email": "alice@example.com"
-    }
-    ```
-
-#### POST /users/register
-
-- Registers a new user.
-- Response:
-  - `200 OK` on success
-  - Example Response:
-    ```json
-    {
-      "id": 4,
-      "name": "Bob Johnson",
-      "email": "bob@example.com"
+      "email": "alice@example.com",
+      "venmo": "alicesmith"
     }
     ```
 
@@ -171,9 +164,8 @@ Shared Expenses v2 using PERN stack
   - Example Response:
     ```json
     {
-      "id": 1,
+      "groupID": 1,
       "name": "Group 1",
-      "description": "Group 1 description"
     }
     ```
 

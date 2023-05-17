@@ -6,9 +6,9 @@ const router = express.Router();
 // GET REQUESTS
 
 router.get('/:id', async (req, res) => {
-    const groupId = req.params.id;
+    const groupID = req.params.id;
     try {
-        const group = await getGroup(groupId);
+        const group = await getGroup(groupID);
         if (!group) {
             return res.status(404).send('Group not found');
         }
@@ -21,9 +21,9 @@ router.get('/:id', async (req, res) => {
 });
 
 router.get('/:id/users', async (req, res) => {
-    const groupId = req.params.id;
+    const groupID = req.params.id;
     try {
-        const groupUsers = await getGroupUsers(groupId);
+        const groupUsers = await getGroupUsers(groupID);
         if (!groupUsers) {
             return res.status(404).send('Group does not exist or has no users');
         }
@@ -36,9 +36,9 @@ router.get('/:id/users', async (req, res) => {
 });
 
 router.get('/:id/expenses', async (req, res) => {
-    const groupId = req.params.id;
+    const groupID = req.params.id;
     try {
-        const groupXpns = await getGroupExpenses(groupId);
+        const groupXpns = await getGroupExpenses(groupID);
         if (!groupXpns) {
             return res.status(404).send('Group does not exist or has no expenses');
         }
@@ -67,10 +67,10 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.post(':id/addUser/:userId', async (req, res) => {
-    const { groupId, userId } = req.params.id
+router.post(':id/addUser/:userID', async (req, res) => {
+    const { groupID, userID } = req.params.id
     try {
-        const userGroup = await addGroupUser(groupId, userId);
+        const userGroup = await addGroupUser(groupID, userID);
         if (!userGroup) {
             console.log('User or group specified by IDs does not exist')
         }

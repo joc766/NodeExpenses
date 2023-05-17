@@ -14,12 +14,11 @@ async function getUserExpenses(userID, unpaidOnly = false) {
 async function getUserGroups(userID) {
   // TODO
   // Query: SELECT g.* FROM Groups g JOIN User_Groups ug ON g.groupID = ug.groupID WHERE ug.userID = :userID
-
 }
 
 async function getUserDebt(userID) {
   // TODO 
-  // Query: SELECT SUM(amount) FROM Dues WHERE userID = :userID AND paid = false; 
+  // Query: SELECT SUM(amount) as debt FROM Dues WHERE userID = :userID AND paid = false; 
   //
 }
 

@@ -7,9 +7,9 @@ const router = express.Router();
 // GET REQUESTS
 
 router.get('/:id', async (req, res) => {
-    const userId = req.params.id;
+    const userID = req.params.id;
     try {
-        const user = await getUser(userId);
+        const user = await getUser(userID);
         if (!user) {
             return res.status(404).send('User not found');
         }
@@ -21,15 +21,15 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.get('/:id/transactions', async (req, res) => {
-    const userId = req.params.id;
+router.get('/:id/expenses', async (req, res) => {
+    const userID = req.params.id;
     const unpaidOnly = req.query.unpaidOnly;
     try {
-        const transactions = await getUserExpenses(userId, unpaidOnly);
-        if (!transactions) {
-            res.status(404).send('Client Error: User does not exist or has no transactions');
+        const expenses = await getUserExpenses(userID, unpaidOnly);
+        if (!expenses) {
+            res.status(404).send('Client Error: User does not exist or has no expenses');
         }
-        res.json(transactions);
+        res.json(expenses);
     }
     catch (err) {
         console.log(err);
@@ -38,9 +38,9 @@ router.get('/:id/transactions', async (req, res) => {
 });
 
 router.get('/:id/groups', async (req, res) => {
-    const userId = req.params.id;
+    const userID = req.params.id;
     try {
-        const groups = await getUserGroups(userId);
+        const groups = await getUserGroups(userID);
         if (!groups) {
             res.status(404).send('Client Error: User does not exist or has no groups');
         }
@@ -53,9 +53,9 @@ router.get('/:id/groups', async (req, res) => {
 });
 
 router.get('/:id/debt', async (req, res) => {
-    const userId = req.params.id;
+    const userID = req.params.id;
     try {
-        const debt = await getUserDebt(userId);
+        const debt = await getUserDebt(userID);
         if (!debt) {
             res.status(404).send('Client Error: User does not exist or has no debt');
         }
@@ -67,11 +67,11 @@ router.get('/:id/debt', async (req, res) => {
     }
 });
 
-router.get(':id/debt/:debtorId', async (req, res) => {
-    const userId = req.params.id;
-    const debtorId = req.params.debtorId;
+router.get(':id/debt/:debtorID', async (req, res) => {
+    const userID = req.params.id;
+    const debtorID = req.params.debtorID;
     try {
-        const debt = await getUserDebt(userId, debtorId);
+        const debt = await getUserDebt(userID, debtorID);
         if (!debt) {
             res.status(404).send('Client Error: User does not exist or has no debt');
         }
@@ -85,13 +85,13 @@ router.get(':id/debt/:debtorId', async (req, res) => {
 
 // PUT REQUESTS
 
-router.put('/:id/payAll/:debtorId', async (req, res) => {
+router.put('/:id/payAll/:debtorID', async (req, res) => {
     // pay all of a user's debts to person X
-    const userId = req.params.id;
-    const debtorId = req.params.debtorId;
+    const userID = req.params.id;
+    const debtorID = req.params.debtorID;
 
     try {
-        await payDebtor(userId, debtorId);
+        await payDebtor(userID, debtorID);
     }
     catch (err) {
         console.log(err);
