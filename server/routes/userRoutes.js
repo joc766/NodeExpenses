@@ -1,21 +1,15 @@
 const express = require('express');
 const { admin } = require('../config/firebaseAdmin');
-const { getUser, getUserTransactions, getUserGroups, addUser, payDebtor, deleteUser } = require('../models/userModel');
+const { getUser, getUserExpenses, getUserGroups, addUser, payDebtor, deleteUser } = require('../models/userModel');
 
 const router = express.Router();
-
-// DISPLAY PAGES
-router.get('/register', (req, res) => {
-    res.render('userRegister', { title: 'User Registration' });
-});
-
 
 // GET REQUESTS
 
 router.get('/:id', async (req, res) => {
     const userId = req.params.id;
     try {
-        const user = await getUserById(userId);
+        const user = await getUser(userId);
         if (!user) {
             return res.status(404).send('User not found');
         }
@@ -31,7 +25,7 @@ router.get('/:id/transactions', async (req, res) => {
     const userId = req.params.id;
     const unpaidOnly = req.query.unpaidOnly;
     try {
-        const transactions = await getUserTransactions(userId, unpaidOnly);
+        const transactions = await getUserExpenses(userId, unpaidOnly);
         if (!transactions) {
             res.status(404).send('Client Error: User does not exist or has no transactions');
         }
@@ -120,8 +114,8 @@ router.post('/register', async (req, res) => {
 });
 
 // TODO add permissions to this route
-router.post('/delete/:uid', async (req, res) => {
-    const uid = req.params.uid;
+router.post('/delete/:id', async (req, res) => {
+    const uid = req.params.id;
     try {
         await admin.auth().deleteUser(user.uid);
         res.json(user);

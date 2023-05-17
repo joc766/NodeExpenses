@@ -6,10 +6,10 @@ async function getUser(userId) {
   // return userInfo;
 }
 
-async function getUserTransactions(userId, params) {
+async function getUserExpenses(userId, params) {
   // TODO 
   const unpaidOnly = params.unpaidOnly || false;
-  // Query: SELCT * FROM Transactions WHERE userId = userId AND paid = ${unpaidOnly} ORDER BY date;
+  // Query: SELCT * FROM Expenses WHERE userId = userId AND paid = ${unpaidOnly} ORDER BY date;
 }
 
 async function getUserGroups(userId) {
@@ -40,7 +40,7 @@ async function deleteUser(uid) {
   
 module.exports = {
   getUser,
-  getUserTransactions,
+  getUserExpenses,
   getUserGroups,
   addUser,
   payDebtor,

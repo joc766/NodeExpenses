@@ -4,6 +4,7 @@ const app = express();
 const userRoutes = require('./routes/userRoutes');
 const groupRoutes = require('./routes/groupRoutes');
 const expenseRoutes = require('./routes/expenseRoutes');
+const dueRoutes = require('./routes/dueRoutes');
 
 const port = 3000
 
@@ -16,6 +17,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use('/user', userRoutes);
 app.use('/group', groupRoutes);
 app.use('/expense', expenseRoutes);
+app.use('/dues', dueRoutes);
 
 app.get('/', (req, res) => {
   res.render('index', { title: 'Home' });
