@@ -256,6 +256,96 @@ Shared Expenses v2 using PERN stack
 - Response:
   - `200 OK` on success
 
+### Expenses Endpoints
+
+#### GET /expenses/:id
+
+- Fetches a specific expense by ID.
+- Parameters:
+  - `id` (required) - The ID of the expense to retrieve.
+- Response:
+  - `200 OK` on success
+  - `404 Not Found` if the expense with the given ID doesn't exist
+  - Example Response:
+    ```json
+    {
+      "id": 1,
+      "description": "Expense 1",
+      "amount": 10.5
+    }
+    ```
+
+#### GET /expenses/:id/contributors
+
+- Fetches contributors for a specific expense.
+- Parameters:
+  - `id` (required) - The ID of the expense to retrieve contributors for.
+- Response:
+  - `200 OK` on success
+  - `404 Not Found` if the expense with the given ID doesn't exist
+  - Example Response:
+    ```json
+    [
+      {
+        "id": 1,
+        "name": "John Doe",
+        "email": "john@example.com"
+      },
+      {
+        "id": 2,
+        "name": "Jane Smith",
+        "email": "jane@example.com"
+      }
+    ]
+    ```
+
+#### POST /expenses
+
+- Creates a new expense.
+- Request Body:
+  - `description` (required) - The description of the expense.
+  - `amount` (required) - The amount of the expense.
+- Response:
+  - `200 OK` on success
+  - Example Response:
+    ```json
+    {
+      "id": 3,
+      "description": "Expense 3",
+      "amount": 15.0
+    }
+    ```
+
+### Dues Endpoints
+
+#### PUT /dues/:id/pay
+
+- Pays a due by ID.
+- Parameters:
+  - `id` (required) - The ID of the due to pay.
+- Response:
+  - `200 OK` on success
+  - `404 Not Found` if the due with the given ID doesn't exist
+
+#### PUT /dues/:id/markAsPaid
+
+- Marks a due as paid by ID.
+- Parameters:
+  - `id` (required) - The ID of the due to mark as paid.
+- Response:
+  - `200 OK` on success
+  - `404 Not Found` if the due with the given ID doesn't exist
+
+#### DELETE /dues/:id
+
+- Deletes a due by ID.
+- Parameters:
+  - `id` (required) - The ID of the due to delete.
+- Response:
+  - `200 OK` on success
+  - `404 Not Found` if the due with the given ID doesn't exist
+
+
 Please note that the above documentation assumes the usage of Express.js router and asynchronous functions for handling the endpoints.
 
 
