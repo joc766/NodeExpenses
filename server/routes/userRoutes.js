@@ -1,6 +1,6 @@
 const express = require('express');
 const { admin } = require('../config/firebaseAdmin');
-const { getUser, getUserExpenses, getUserGroups, addUser, payDebtor, deleteUser } = require('../models/userModel');
+const { getUser, getUserExpenses, getUserGroups, getUserDebt, payDebtor, addUser, deleteUser } = require('../models/userModel');
 
 const router = express.Router();
 
@@ -45,6 +45,37 @@ router.get('/:id/groups', async (req, res) => {
             res.status(404).send('Client Error: User does not exist or has no groups');
         }
         res.json(groups);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+router.get('/:id/debt', async (req, res) => {
+    const userId = req.params.id;
+    try {
+        const debt = await getUserDebt(userId);
+        if (!debt) {
+            res.status(404).send('Client Error: User does not exist or has no debt');
+        }
+        res.json(debt);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+router.get(':id/debt/:debtorId', async (req, res) => {
+    const userId = req.params.id;
+    const debtorId = req.params.debtorId;
+    try {
+        const debt = await getUserDebt(userId, debtorId);
+        if (!debt) {
+            res.status(404).send('Client Error: User does not exist or has no debt');
+        }
+        res.json(debt);
     }
     catch (err) {
         console.log(err);

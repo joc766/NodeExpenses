@@ -1,13 +1,13 @@
 const pool = require('../config/db');
 
-async function getExpense(expenseId) {
+async function getExpense(expenseID) {
     // TODO 
-    // Query: SELECT * FROM expenses WHERE id = expenseId;
+    // Query: SELECT * FROM expenses WHERE id = expenseID;
 };
 
-async function getExpenseContributors(expenseId) {
+async function getExpenseContributors(expenseID) {
     // TODO 
-    // Query: SELECT u.*, d.* FROM users u JOIN dues d ON u.id = d.userID WHERE d.expenseID = expenseId;
+    // Query: SELECT u.*, d.* FROM users u JOIN dues d ON u.id = d.userID WHERE d.expenseID = expenseID;
 };
 
 module.exports = {

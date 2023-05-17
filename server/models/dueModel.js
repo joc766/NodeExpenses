@@ -1,8 +1,8 @@
 const pool = require('../config/db');
 
-async function payDue(dueId) {
+async function payDue(dueID) {
     // TODO
-    // Query: UPDATE Dues SET paid = true WHERE id = dueId;
+    // Query: UPDATE Dues SET paid = true WHERE id = dueID;
 };
 
 module.exports = {
