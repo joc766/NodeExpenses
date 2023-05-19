@@ -2,7 +2,7 @@ const pool = require('../config/db');
 
 async function getExpense(expenseID) {
     // TODO 
-    // Query: SELECT * FROM expenses WHERE id = expenseID;
+    // Query: SELECT * FROM expenses WHERE id = expenseID ORDER BY date;
 };
 
 async function getExpenseContributors(expenseID) {

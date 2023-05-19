@@ -1,0 +1,370 @@
+
+// Users Endpoints
+
+// GET REQUESTS
+
+router.get('/:id', async (req, res) => {
+    const userId = req.params.id;
+    try {
+        const user = await getUser(userId);
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+        res.json(user);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error')
+    }
+});
+
+router.get('/:id/transactions', async (req, res) => {
+    const userId = req.params.id;
+    const unpaidOnly = req.query.unpaidOnly;
+    try {
+        const transactions = await getUserExpenses(userId, unpaidOnly);
+        if (!transactions) {
+            res.status(404).send('Client Error: User does not exist or has no transactions');
+        }
+        res.json(transactions);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+router.get('/:id/groups', async (req, res) => {
+    const userId = req.params.id;
+    try {
+        const groups = await getUserGroups(userId);
+        if (!groups) {
+            res.status(404).send('Client Error: User does not exist or has no groups');
+        }
+        res.json(groups);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+router.get('/:id/debt', async (req, res) => {
+    const userId = req.params.id;
+    try {
+        const debt = await getUserDebt(userId);
+        if (!debt) {
+            res.status(404).send('Client Error: User does not exist or has no debt');
+        }
+        res.json(debt);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+router.get(':id/debt/:debtorId', async (req, res) => {
+    const userId = req.params.id;
+    const debtorId = req.params.debtorId;
+    try {
+        const debt = await getUserDebt(userId, debtorId);
+        if (!debt) {
+            res.status(404).send('Client Error: User does not exist or has no debt');
+        }
+        res.json(debt);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// PUT REQUESTS
+
+router.put('/:id/payAll/:debtorId', async (req, res) => {
+    // pay all of a user's debts to person X
+    const userId = req.params.id;
+    const debtorId = req.params.debtorId;
+
+    try {
+        await payDebtor(userId, debtorId);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+    }
+
+    res.status(200).send('OK');
+})
+
+// router.put('/user/login', async (req, res) => {
+//     // use firebase auth to log in
+//     const { email, password } = req.body;
+//     try {
+//         const user = await admin.auth().signInWithEmailAndPassword(email, password);
+//         res.json(user);
+//     }
+//     catch (err) {
+//         res.status(400).send(err.message);
+//     }
+// });
+
+// POST REQUESTS
+
+// THIS IS THE BETTER ROUTE IN TERMS OF SIMPLICITY. BELOW ROUTE SHOULD BE IMPLEMENTED TO FRONT-END
+router.post('/', async (req, res) => {
+    const { userID, email, name, venmo } = req.body
+    try {
+        const newUser = addUser(userID, email, name, venmo);
+        if (!newUser) {
+            res.status(500).send('Failed to create new user');
+        }
+    }
+    catch (err) {
+        console.log(err)
+        res.status(500).send('Internal Server Error')
+    }
+});
+
+router.post('/register', async (req, res) => {
+    const { name, email, password, venmo } = req.body;
+    try {
+      var user = await admin.auth().createUser({
+        email: email,
+        password: password,
+        displayName: name,
+      });
+    }
+    catch (err) {
+      if (err.code === 'auth/internal-error') {
+        res.status(500).send(err.message);
+      }
+      else {
+        res.status(400).send(err.message)
+      }
+    }
+
+    try {
+        await addUser(user.uid, user.email, user.displayName, venmo);
+        res.json(user);
+    }
+    catch (err) {
+        console.log('Firebase Admin User Created, but not added to database.')
+        console.log(err)
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// DELETE ROUTES
+
+router.delete('/:id', async (req, res) => {
+    const uid = req.params.id;
+    try {
+        await admin.auth().deleteUser(user.uid);
+        res.json(user);
+    }
+    catch (err) {
+        res.status(400).send(err.message);
+    }
+
+    try {
+        await deleteUser(uid);
+        res.status(200).send('OK');
+    }
+    catch (err) {
+        console.log('Firebase Admin User Deleted, but not removed from database.')
+        console.log(err)
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// Groups Endpoints 
+
+// GET REQUESTS
+
+router.get('/:id', async (req, res) => {
+    const groupId = req.params.id;
+    try {
+        const group = await getGroup(groupId);
+        if (!group) {
+            return res.status(404).send('Group not found');
+        }
+        res.json(group);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+router.get('/:id/users', async (req, res) => {
+    const groupId = req.params.id;
+    try {
+        const groupUsers = await getGroupUsers(groupId);
+        if (!groupUsers) {
+            return res.status(404).send('Group does not exist or has no users');
+        }
+        res.json(groupUsers)
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+router.get('/:id/expenses', async (req, res) => {
+    const groupId = req.params.id;
+    try {
+        const groupXpns = await getGroupExpenses(groupId);
+        if (!groupXpns) {
+            return res.status(404).send('Group does not exist or has no expenses');
+        }
+        res.json(groupXpns);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+    }
+})
+
+// POST REQUESTS
+
+// One user will have to create a group, and then other users will get a shareable link to join the group
+// If user wants to add members at creation, they can choose their existing name but that will just send an email with link
+// Contact through firebase??
+router.post('/', async (req, res) => {
+    const { groupName, initialMembers } = req.body
+    // TODO deal with emailing initialMembers
+    try {
+        const newGroup = await addGroup(groupName);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+router.post(':id/addUser/:userId', async (req, res) => {
+    const { groupId, userId } = req.params.id
+    try {
+        const userGroup = await addGroupUser(groupId, userId);
+        if (!userGroup) {
+            console.log('User or group specified by IDs does not exist')
+        }
+        res.json(userGroup)
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(500).send('Internal Server Error')
+    }
+});
+
+// DELETE ROUTES
+
+router.delete('/:id', async (req, res) => {
+    const groupID = req.params.id;
+    try {
+        await deleteGroup(gropuID);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+router.delete('/:id/removeUser:userID', async (req, res) => {
+    const { groupID, userID } = req.params;
+    try {
+        await deleteGroupUser(groupID, userID);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error')
+    }
+})
+
+
+
+// Expenses Endpoints
+
+// GET ROUTES
+
+router.get('/:id', async (req, res) => {
+    const expenseId = req.params.id;
+    try {
+        const expenseInfo = await getExpense(expenseId);
+        if (!expenseInfo) {
+            return res.status(404).send('Expense not found');
+        }
+        res.json(expenseInfo);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error')
+    }
+});
+
+router.get('/:id/contributors', async (req, res) => {
+    const expenseId = req.params.id;
+    try {
+        const expenseContributors = await getExpenseContributors(expenseId);
+        if (!expenseContributors) {
+            return res.status(404).send('Expense not found');
+        }
+        res.json(expenseContributors);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error')
+    }
+});
+
+// POST ROUTES
+
+router.post('/', async (req, res) => {
+    const { title, amt, descrip, who_paid, n_shares, date} = req.body;
+    try {
+        const newExpense = addExpense(title, amt, descrip, who_paid, n_shares, date);
+        if (!newExpense) {
+            res.status(500).send('Failed to create new expense');
+        }
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// DELETE ROUTES
+
+router.delete('/:id', async (req, res) => {
+    const expenseID = req.params.id;
+    try {
+        await deleteExpense(expenseID);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
+// Dues Endpoints
+
+// PUT ROUTES
+
+router.put('/:id/pay', async (req, res) => {
+    const dueId = req.params.id;
+    try {
+        const result = await payDue(dueId);
+        if (!result) {
+            return res.status(404).send('Due not found');
+        }
+        res.json(result);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error')
+    }
+});

@@ -112,6 +112,7 @@ Shared Expenses v2 using PERN stack
     }
     ```
 
+
 #### PUT /users/:id/payAll/:debtorId
 
 - Pays all debt for a user to a specific debtor.
@@ -342,3 +343,16 @@ Shared Expenses v2 using PERN stack
   - `404 Not Found` if the due with the given ID doesn't exist
 
 
+
+## Database Documentation
+
+### Commands to access 
+
+- docker exec -it 1538c7fc6978 psql -U jackoconnor -d expenses
+  - start command-line session
+
+- docker exec -it 1538c7fc6978 psql -U jackoconnor -d expenses -f /reset.sql
+  - reset the database
+
+- docker exec -it 1538c7fc6978 psql -U jackoconnor -d expenses -f /dummy_data.sql
+  - insert the dummy data into the database

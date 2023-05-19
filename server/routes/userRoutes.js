@@ -99,23 +99,10 @@ router.put('/:id/payAll/:debtorID', async (req, res) => {
     }
 
     res.status(200).send('OK');
-})
-
-// router.put('/user/login', async (req, res) => {
-//     // use firebase auth to log in
-//     const { email, password } = req.body;
-//     try {
-//         const user = await admin.auth().signInWithEmailAndPassword(email, password);
-//         res.json(user);
-//     }
-//     catch (err) {
-//         res.status(400).send(err.message);
-//     }
-// });
+});
 
 // POST REQUESTS
 
-// THIS IS THE BETTER ROUTE IN TERMS OF SIMPLICITY. BELOW ROUTE SHOULD BE IMPLEMENTED TO FRONT-END
 router.post('/', async (req, res) => {
     const { userID, email, name, venmo } = req.body
     try {
