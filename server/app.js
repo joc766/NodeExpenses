@@ -14,9 +14,9 @@ const searchRoutes = require('./routes/searchRoutes');
 const port = 3000
 
 // Read the SSL/TLS certificate and private key files
-const privateKey = fs.readFileSync(path.join(__dirname, 'private-key.pem'), 'utf8');
-const certificate = fs.readFileSync(path.join(__dirname, 'certificate.pem'), 'utf8');
-const credentials = { key: privateKey, cert: certificate };
+// const privateKey = fs.readFileSync(path.join(__dirname, 'private-key.pem'), 'utf8');
+// const certificate = fs.readFileSync(path.join(__dirname, 'certificate.pem'), 'utf8');
+// const credentials = { key: privateKey, cert: certificate };
 
 app.use(express.static(path.join(__dirname, '../client', 'public')));
 app.use(express.urlencoded({ extended: true }));
@@ -35,8 +35,8 @@ app.get('/', (req, res) => {
 });
 
 // Start the HTTPS server
-const httpsServer = https.createServer(credentials, app);
+// const httpsServer = https.createServer(credentials, app);
 
-httpsServer.listen(port, () => {
+app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
