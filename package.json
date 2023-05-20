@@ -4,7 +4,7 @@
   "description": "Node version 1. Shared Expenses project version 2.o",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npx jest",
     "start": "node server/app.js"
   },
   "author": "Jack O'Connor",
@@ -16,6 +16,7 @@
     "firebase": "^9.22.0",
     "firebase-admin": "^11.8.0",
     "https": "^1.0.0",
-    "pg": "^8.10.0"
+    "pg": "^8.10.0",
+    "supertest": "^6.3.3"
   }
 }

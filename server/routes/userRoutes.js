@@ -7,6 +7,7 @@ const router = express.Router();
 // GET REQUESTS
 
 router.get('/:id', async (req, res) => {
+    console.log("HERE")
     const userID = req.params.id;
     try {
         const user = await getUser(userID);

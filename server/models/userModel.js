@@ -1,25 +1,51 @@
 const pool = require('../config/db.js');
 
 async function getUser(userID) {
-  // const result = await pool.query(`SELECT * FROM Users WHERE id = :userID`, { userID });
-  // userInfo = result.rows[0];
-  // return userInfo;
+  const client = await pool.connect();
+  try {
+    var result = await client.query(`SELECT * FROM "Users" WHERE "userID" = $1`, [ userID ]);
+    await client.query('COMMIT');
+  }
+  catch (err) {
+    console.log(err);
+    await client.query('ROLLBACK');
+    throw err;
+  }
+  finally {
+    client.release();
+  }
+  userInfo = result.rows[0];
+  return userInfo;
 }
 
-async function getUserExpenses(userID, unpaidOnly = false) {
-  // TODO 
-  // Query: SELCT * FROM Expenses WHERE userID = userID AND paid = ${unpaidOnly} ORDER BY date;
+async function getUserExpenses(userID, unpaidOnly = null) {
+  const client = await pool.connect();
+  try {
+    var query = `SELECT * FROM "Expenses" NATURAL JOIN "Dues" WHERE "userID" = $1::int`;
+    var values = [ Number(userID) ];
+    if (unpaidOnly !== null) {
+      query += ` AND "paid" = $2`;
+      values.push(unpaidOnly);
+    }
+    query += ` ORDER BY "date";`;
+    // console.log(query, values)
+    var result = await client.query(query, values);
+    await client.query('COMMIT');
+  }
+  catch (err) {
+    console.log(err);
+    await client.query('ROLLBACK');
+    throw err;
+  }
+  finally {
+    client.release();
+  }
+  return result.rows;
 }
 
 async function getUserGroups(userID) {
   // TODO
   // Query: SELECT g.* FROM Groups g JOIN User_Groups ug ON g.groupID = ug.groupID WHERE ug.userID = :userID
-}
-
-async function getUserDebt(userID) {
-  // TODO 
-  // Query: SELECT SUM(amount) as debt FROM Dues WHERE userID = :userID AND paid = false; 
-  //
 }
 
 async function getUserDebt(userID, debtorID) {

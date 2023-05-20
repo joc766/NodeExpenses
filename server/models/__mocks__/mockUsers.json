@@ -1,0 +1,32 @@
+[
+    {
+        "userID": 1,
+        "name": "John Doe",
+        "email": "john@gmail.com",
+        "venmo": "johndoe"
+    },
+    {
+        "userID": 2,
+        "name": "Jane Doe",
+        "email": "jane@gmail.com",
+        "venmo": "janedoe"
+    },
+    {
+        "userID": 3,
+        "name": "John Smith",
+        "email": "joe@gmail.com",
+        "venmo": "johnsmith"
+    },
+    {
+        "userID": 4,
+        "name": "Jane Smith",
+        "email": "jane.smith@gmail.com",
+        "venmo": "janesmith"
+    },
+    {
+        "userID": 5,
+        "name": "Jack Doe",
+        "email": "jack@gmail.com",
+        "venmo": "jackdoe"
+    }
+]
