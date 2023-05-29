@@ -7,7 +7,7 @@ CREATE TABLE "Users" (
 
 CREATE TABLE "Groups" (
   "groupID" integer PRIMARY KEY,
-  "name" varchar(30) NOT NULL
+  "group_name" varchar(30) NOT NULL
 );
 
 CREATE TABLE "User_Groups" (

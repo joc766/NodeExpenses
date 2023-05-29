@@ -20,8 +20,8 @@ Shared Expenses v2 using PERN stack
     ```json
     {
       "userID": 1,
-      "name": "John Doe",
       "email": "john@example.com",
+      "name": "John Doe",
       "venmo": "johndoe"
     }
     ```
@@ -45,7 +45,9 @@ Shared Expenses v2 using PERN stack
         "descrip": "Bought apples, oranges, and bananas",
         "who_paid": 1,
         "n_shares": 5,
-        "date": 2022-05-15
+        "date": 2022-05-15,
+        "userID": 2,
+        "paid": false,
       },
       {
         "expoenseID": 2,
@@ -54,7 +56,9 @@ Shared Expenses v2 using PERN stack
         "descrip": "Security deposit only",
         "who_paid": 2,
         "n_shares": 5,
-        "date": 2022-05-11
+        "date": 2022-05-11,
+        "userID": 1,
+        "paid": true,
       }
     ]
     ```
@@ -72,11 +76,11 @@ Shared Expenses v2 using PERN stack
     [
       {
         "groupID": 1,
-        "name": "Group 1",
+        "group_name": "Group 1",
       },
       {
         "groupID": 2,
-        "name": "Group 2",
+        "grou_name": "Group 2",
       }
     ]
     ```
@@ -96,12 +100,13 @@ Shared Expenses v2 using PERN stack
     }
     ```
 
-#### GET /users/:id/debt/:debtorId
+#### GET /users/:id/debt
 
 - Fetches debt information for a specific user and debtor.
 - Parameters:
   - `id` (required) - The ID of the user.
-  - `debtorID` (required) - The ID of the debtor.
+- Query Parameters:
+  - `debtorID` (optional) - The ID of the debtor. Default gives total user debt. 
 - Response:
   - `200 OK` on success
   - `404 Not Found` if the user or debtor with the given IDs don't exist
@@ -111,7 +116,6 @@ Shared Expenses v2 using PERN stack
       "debt": 5.00
     }
     ```
-
 
 #### PUT /users/:id/payAll/:debtorId
 

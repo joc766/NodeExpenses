@@ -1,0 +1,33 @@
+[
+    {
+      "groupID": 1,
+      "userID": 1,
+      "group_name": "Group 1"
+    },
+    {
+      "groupID": 1,
+      "userID": 2,
+      "group_name": "Group 1"
+    },
+    {
+      "groupID": 2,
+      "userID": 2,
+      "group_name": "Group 2"
+    },
+    {
+      "groupID": 2,
+      "userID": 3,
+      "group_name": "Group 2"
+    },
+    {
+      "groupID": 3,
+      "userID": 3,
+      "group_name": "Group 3"
+    },
+    {
+      "groupID": 3,
+      "userID": 1,
+      "group_name": "Group 3"
+    }
+  ]
+  

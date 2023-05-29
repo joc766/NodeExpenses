@@ -1,13 +1,13 @@
 const express = require('express');
 const { admin } = require('../config/firebaseAdmin');
 const { getUser, getUserExpenses, getUserGroups, getUserDebt, payDebtor, addUser, deleteUser } = require('../models/userModel');
+const {v4: uuidv4 } = require('uuid');
 
 const router = express.Router();
 
 // GET REQUESTS
 
 router.get('/:id', async (req, res) => {
-    console.log("HERE")
     const userID = req.params.id;
     try {
         const user = await getUser(userID);
@@ -28,7 +28,7 @@ router.get('/:id/expenses', async (req, res) => {
     try {
         const expenses = await getUserExpenses(userID, unpaidOnly);
         if (!expenses) {
-            res.status(404).send('Client Error: User does not exist or has no expenses');
+            return res.status(404).send('Client Error: User does not exist or has no expenses');
         }
         res.json(expenses);
     }
@@ -43,7 +43,7 @@ router.get('/:id/groups', async (req, res) => {
     try {
         const groups = await getUserGroups(userID);
         if (!groups) {
-            res.status(404).send('Client Error: User does not exist or has no groups');
+            return res.status(404).send('Client Error: User does not exist or has no groups');
         }
         res.json(groups);
     }
@@ -55,26 +55,11 @@ router.get('/:id/groups', async (req, res) => {
 
 router.get('/:id/debt', async (req, res) => {
     const userID = req.params.id;
-    try {
-        const debt = await getUserDebt(userID);
-        if (!debt) {
-            res.status(404).send('Client Error: User does not exist or has no debt');
-        }
-        res.json(debt);
-    }
-    catch (err) {
-        console.log(err);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-router.get(':id/debt/:debtorID', async (req, res) => {
-    const userID = req.params.id;
-    const debtorID = req.params.debtorID;
+    const debtorID = req.query.debtor;
     try {
         const debt = await getUserDebt(userID, debtorID);
         if (!debt) {
-            res.status(404).send('Client Error: User does not exist or has no debt');
+            return res.status(404).send('Client Error: User does not exist or has no debt');
         }
         res.json(debt);
     }
@@ -90,7 +75,6 @@ router.put('/:id/payAll/:debtorID', async (req, res) => {
     // pay all of a user's debts to person X
     const userID = req.params.id;
     const debtorID = req.params.debtorID;
-
     try {
         await payDebtor(userID, debtorID);
     }
@@ -105,16 +89,22 @@ router.put('/:id/payAll/:debtorID', async (req, res) => {
 // POST REQUESTS
 
 router.post('/', async (req, res) => {
-    const { userID, email, name, venmo } = req.body
+
+    var { email, name, venmo } = req.body;
+    if (!email || !name || !venmo) {
+        return res.status(400).send('Client Error: Bad Request');
+    }
+
     try {
-        const newUser = addUser(userID, email, name, venmo);
+        const newUser = await addUser(email, name, venmo);
         if (!newUser) {
-            res.status(500).send('Failed to create new user');
+            return res.status(500).send('Failed to create new user');
         }
+        return res.json(newUser);
     }
     catch (err) {
         console.log(err)
-        res.status(500).send('Internal Server Error')
+        return res.status(500).send('Internal Server Error')
     }
 });
 
@@ -129,44 +119,45 @@ router.post('/register', async (req, res) => {
     }
     catch (err) {
       if (err.code === 'auth/internal-error') {
-        res.status(500).send(err.message);
+        return res.status(500).send(err.message);
       }
       else {
-        res.status(400).send(err.message)
+        return res.status(400).send(err.message)
       }
     }
 
     try {
-        await addUser(user.uid, user.email, user.displayName, venmo);
-        res.json(user);
+        await addUser(user.email, user.displayName, venmo, user.uid);
+        return res.json(user);
     }
     catch (err) {
         console.log('Firebase Admin User Created, but not added to database.')
         console.log(err)
-        res.status(500).send('Internal Server Error');
+        return res.status(500).send('Internal Server Error');
     }
 });
 
 // DELETE ROUTES
 
 router.delete('/:id', async (req, res) => {
-    const uid = req.params.id;
+    const userID = req.params.id;
     try {
-        await admin.auth().deleteUser(user.uid);
-        res.json(user);
+        // COMMENT BACK WHEN WE'RE FULLY USING FIREBASE AUTH
+        // await admin.auth().deleteUser(userID); 
     }
     catch (err) {
-        res.status(400).send(err.message);
+        console.log(err)
+        return res.status(400).send(err.message);
     }
 
     try {
-        await deleteUser(uid);
-        res.status(200).send('OK');
+        const user = await deleteUser(userID);
+        return res.json(user);
     }
     catch (err) {
         console.log('Firebase Admin User Deleted, but not removed from database.')
         console.log(err)
-        res.status(500).send('Internal Server Error');
+        return res.status(500).send('Internal Server Error');
     }
 });
 
