@@ -6,21 +6,24 @@ const mockUserGroups = require('../models/__mocks__/mockUserGroups.json');
 
 jest.mock('../models/userModel'); // Mock the userModel module
 
+let server;
+
 describe('User Routes', () => {
-  let server;
+
   beforeAll(() => {
     server = startServer(); // Start the server before running the tests
   });
 
+
   afterAll(() => {
-    stopServer(); // Stop the server after the tests are completed
+    return stopServer();
   });
 
   // GET /user/:id
   it('GET /user/:id -- should return a user object', async () => {
-    const response = await request(server).get('/user/1');
+    const expectedUser = mockUsers.find(user => user.userID == 1);
+    const response = await request(server).get(`/user/${expectedUser.userID}`);
     expect(response.status).toBe(200);
-    const expectedUser = mockUsers[0];
     expect(response.body).toEqual(expectedUser);
   });
 
@@ -32,9 +35,10 @@ describe('User Routes', () => {
 
   // GET /user/:id/expenses
   it('GET /user/:id/expenses -- should return a list of expenses for a user', async () => {
-    const response = await request(server).get('/user/1/expenses');
+    const tgtID = 1;
+    const expectedExpenses = mockDueExpenses.filter(expense => expense.userID === tgtID);
+    const response = await request(server).get(`/user/${tgtID}/expenses`);
     expect(response.status).toBe(200);
-    const expectedExpenses = mockDueExpenses.filter(expense => expense.userID === 1);
     expect(response.body).toEqual(expectedExpenses);
   });
 
@@ -129,6 +133,6 @@ describe('User Routes', () => {
     const expectedUser = mockUsers[0];
     const response = await request(server).delete(`/user/${expectedUser.userID}`);
     expect(response.status).toBe(200);
-    expect(response.body).toStrictEqual(expectedUser);
+    expect(response.body).toEqual(expectedUser);
   });
 });

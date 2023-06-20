@@ -64,6 +64,19 @@ process.on('SIGTERM', handleShutdown);
 // Start the HTTPS server
 // const httpsServer = https.createServer(credentials, app);
 
+// Stop the server but as a promise
+function stopServer() {
+  return new Promise((resolve, reject) => {
+    server.close(err => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve();
+    });
+  });
+}
+
 // Start the server
 function startServer() {
   server = app.listen(port, () => {
@@ -72,10 +85,6 @@ function startServer() {
   return server;
 }
 
-// Stop the server
-function stopServer() {
-  server.close();
-}
 
 // Export the startServer and stopServer functions for testing
 module.exports = { startServer, stopServer };

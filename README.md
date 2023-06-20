@@ -158,7 +158,7 @@ Shared Expenses v2 using PERN stack
 
 ### Groups Endpoints
 
-#### GET /groups/:id
+#### GET /group/:id
 
 - Fetches a specific group by ID.
 - Parameters:
@@ -174,7 +174,7 @@ Shared Expenses v2 using PERN stack
     }
     ```
 
-#### GET /groups/:id/users
+#### GET /group/:id/users
 
 - Fetches users in a specific group.
 - Parameters:
@@ -198,7 +198,7 @@ Shared Expenses v2 using PERN stack
     ]
     ```
 
-#### GET /groups/:id/expenses
+#### GET /group/:id/expenses
 
 - Fetches expenses for a specific group.
 - Parameters:
@@ -210,19 +210,21 @@ Shared Expenses v2 using PERN stack
     ```json
     [
       {
-        "id": 1,
-        "description": "Expense 1",
-        "amount": 10.5
+        "expenseID": 1,
+        "title": "Expense 1",
+        "amount": 10.5,
+        "descrip": "description",
       },
       {
         "id": 2,
-        "description": "Expense 2",
-        "amount": 20.0
+        "title": "Expense 2",
+        "amount": 20.0,
+        "descrip": "description",
       }
     ]
     ```
 
-#### POST /groups
+#### POST /group
 
 - Creates a new group.
 - Response:
@@ -236,7 +238,7 @@ Shared Expenses v2 using PERN stack
     }
     ```
 
-#### POST /groups/:id/addUser/:userId
+#### POST /group/:id/addUser/:userId
 
 - Adds a user to a specific group.
 - Parameters:
@@ -245,7 +247,7 @@ Shared Expenses v2 using PERN stack
 - Response:
   - `200 OK` on success
 
-#### DELETE /groups/:id
+#### DELETE /group/:id
 
 - Deletes a group.
 - Parameters:

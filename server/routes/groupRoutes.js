@@ -10,13 +10,13 @@ router.get('/:id', async (req, res) => {
     try {
         const group = await getGroup(groupID);
         if (!group) {
-            return res.status(404).send('Group not found');
+            return res.status(400).send('Group not found');
         }
-        res.json(group);
+        return res.json(group);
     }
     catch (err) {
         console.log(err);
-        res.status(500).send('Internal Server Error');
+        return res.status(500).send('Internal Server Error');
     }
 });
 
@@ -24,14 +24,14 @@ router.get('/:id/users', async (req, res) => {
     const groupID = req.params.id;
     try {
         const groupUsers = await getGroupUsers(groupID);
-        if (!groupUsers) {
+        if (!groupUsers || groupUsers.length == 0) {
             return res.status(404).send('Group does not exist or has no users');
         }
-        res.json(groupUsers)
+        return res.json(groupUsers);
     }
     catch (err) {
         console.log(err);
-        res.status(500).send('Internal Server Error');
+        return res.status(500).send('Internal Server Error');
     }
 });
 
@@ -40,13 +40,13 @@ router.get('/:id/expenses', async (req, res) => {
     try {
         const groupXpns = await getGroupExpenses(groupID);
         if (!groupXpns) {
-            return res.status(404).send('Group does not exist or has no expenses');
+            return res.status(404).send('Group does not exist');
         }
-        res.json(groupXpns);
+        return res.json(groupXpns);
     }
     catch (err) {
         console.log(err);
-        res.status(500).send('Internal Server Error');
+        return res.status(500).send('Internal Server Error');
     }
 })
 
@@ -78,7 +78,7 @@ router.post(':id/addUser/:userID', async (req, res) => {
     }
     catch (err) {
         console.log(err);
-        return res.status(500).send('Internal Server Error')
+        return res.status(500).send('Internal Server Error');
     }
 });
 

@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "npx jest",
-    "start": "node server/app.js"
+    "start": "node app.js"
   },
   "author": "Jack O'Connor",
   "license": "ISC",
@@ -16,6 +16,7 @@
     "firebase": "^9.22.0",
     "firebase-admin": "^11.8.0",
     "https": "^1.0.0",
+    "nodemon": "^2.0.22",
     "pg": "^8.10.0",
     "supertest": "^6.3.3",
     "uuid": "^9.0.0"
