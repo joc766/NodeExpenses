@@ -67,7 +67,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.post(':id/addUser/:userID', async (req, res) => {
+router.post(':/id/addUser/:userID', async (req, res) => {
     const { groupID, userID } = req.params.id
     try {
         const userGroup = await addGroupUser(groupID, userID);
@@ -84,7 +84,7 @@ router.post(':id/addUser/:userID', async (req, res) => {
 
 // DELETE ROUTES
 
-router.delete(':id', async (req, res) => {
+router.delete(':/id', async (req, res) => {
     const groupID = req.params.id;
     try {
         const result = await deleteGroup(groupID);
@@ -96,16 +96,18 @@ router.delete(':id', async (req, res) => {
     }
 });
 
-router.delete('/:id/removeUser:userID', async (req, res) => {
+router.delete('/:groupID/removeUser/:userID', async (req, res) => {
     const { groupID, userID } = req.params;
     try {
-        await deleteGroupUser(groupID, userID);
+        const result = await deleteGroupUser(groupID, userID);
+        console.log(result);
+        return res.status(200).send('OK');
     }
     catch (err) {
         console.log(err);
-        res.status(500).send('Internal Server Error')
+        return res.status(500).send('Internal Server Error');
     }
-})
+});
 
 
 module.exports = router

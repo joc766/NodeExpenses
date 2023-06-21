@@ -98,8 +98,7 @@ async function addGroupUser(groupID, userID) {
 };
 
 async function deleteGroup(groupID) {
-    // TODO
-    // Query: DELETE FROM Groups WHERE groupID = :groupID;
+    // TODO MAKE SURE THE GROUP EXISTS
     const query = `DELETE FROM "Groups" WHERE "groupID" = $1;`;
     const values = [ groupID ];
     try {
@@ -113,8 +112,17 @@ async function deleteGroup(groupID) {
 }
 
 async function deleteGroupUser(groupID, userID) {
-    // TODO 
-    // Query: DELETE FROM User_Groups WHERE gr
+    // TODO MAKE SURE THE USER EXISTS IN THE GROUP
+    const query = `DELETE FROM "User_Groups" WHERE "groupID" = $1 AND "userID" = $2;`;
+    const values = [ groupID, userID ];
+    try {
+        const result = await makeTransaction(query, values);
+        return result;
+    }
+    catch (err) {
+        console.log(err);
+        throw err;
+    }
 }
 
 
