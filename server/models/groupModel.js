@@ -6,6 +6,9 @@ async function getGroup(groupID) {
     const values = [ groupID ];
     try {
         const result = await makeTransaction(query, values);
+        if (result.rows.length == 0) {
+            return null;
+        }
         groupInfo = result.rows[0];
         return groupInfo;
     }

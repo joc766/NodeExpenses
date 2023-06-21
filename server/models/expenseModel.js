@@ -1,8 +1,22 @@
 const pool = require('../config/db');
+const { makeTransaction } = require('./utils');
 
 async function getExpense(expenseID) {
     // TODO 
     // Query: SELECT * FROM expenses WHERE id = expenseID ORDER BY date;
+    const query = `SELECT title, amount, descrip, "who_paid", "n_shares", date FROM expenses WHERE id = $1 ORDER BY date;`;
+    const values = [ expenseID ];
+    try {
+        const result = await makeTransaction(query, values);
+        if (result.rows.length == 0) {
+            return null;
+        }
+        return result.rows[0];
+    }
+    catch (err) {
+        console.log(err);
+        throw err;
+    }
 };
 
 async function getExpenseContributors(expenseID) {

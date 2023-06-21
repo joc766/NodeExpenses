@@ -13,7 +13,7 @@ router.get('/:id', async (req, res) => {
         if (!expenseInfo) {
             return res.status(404).send('Expense not found');
         }
-        res.json(expenseInfo);
+        return res.json(expenseInfo);
     }
     catch (err) {
         console.log(err);
