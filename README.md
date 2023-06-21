@@ -184,18 +184,20 @@ Shared Expenses v2 using PERN stack
   - `404 Not Found` if the group with the given ID doesn't exist
   - Example Response:
     ```json
-    [
-      {
-        "id": 1,
-        "name": "John Doe",
-        "email": "john@example.com"
-      },
-      {
-        "id": 2,
-        "name": "Jane Smith",
-        "email": "jane@example.com"
-      }
-    ]
+      [
+        {
+          "userID":1,
+          "email":"user1@example.com",
+          "name":"User 1",
+          "venmo":"venmo_user1"
+         },
+         {
+          "userID":2,
+          "email":"user2@example.com",
+          "name":"User 2",
+          "venmo":"venmo_user2"
+         }
+       ]
     ```
 
 #### GET /group/:id/expenses
