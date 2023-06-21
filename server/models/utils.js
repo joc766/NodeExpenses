@@ -1,7 +1,16 @@
 const pool = require('../config/db');
 
-async function makeTransaction(query, values) {
+async function getClient() {
     const client = await pool.connect();
+    return client;
+}
+
+function closeClient(client) {
+    client.release();
+    return
+}
+
+async function makeTransaction(client, query, values) {
     try {
         var result = await client.query(query, values);
         await client.query('COMMIT');
@@ -11,12 +20,11 @@ async function makeTransaction(query, values) {
         await client.query('ROLLBACK');
         throw err;
     }
-    finally {
-        client.release();
-    }
     return result;
 }
 
 module.exports = {
+    getClient,
+    closeClient,
     makeTransaction
 };
