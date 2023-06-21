@@ -100,6 +100,16 @@ async function addGroupUser(groupID, userID) {
 async function deleteGroup(groupID) {
     // TODO
     // Query: DELETE FROM Groups WHERE groupID = :groupID;
+    const query = `DELETE FROM "Groups" WHERE "groupID" = $1;`;
+    const values = [ groupID ];
+    try {
+        const result = await makeTransaction(query, values);
+        return result
+    }
+    catch (err) {
+        console.log(err);
+        throw err;
+    }
 }
 
 async function deleteGroupUser(groupID, userID) {

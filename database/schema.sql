@@ -1,7 +1,7 @@
 CREATE TABLE "Users" (
   "userID" integer PRIMARY KEY,
   "email" varchar(40),
-  "name" varchar(20),
+  "user_name" varchar(20),
   "venmo" varchar(30) UNIQUE
 );
 
@@ -21,7 +21,7 @@ CREATE TABLE "User_Groups" (
 CREATE TABLE "Expenses" (
   "expenseID" integer PRIMARY KEY,
   "title" varchar(40),
-  "amount" decimal(7,2),
+  "amount" double(7,2),
   "descrip" text,
   "who_paid" integer,
   "n_shares" integer,
@@ -38,10 +38,11 @@ CREATE TABLE "Group_Expenses" (
 );
 
 CREATE TABLE "Dues" (
-  "expenseID" integer,serID" integer,
-  "shares" decimal(7,2) NOT NULL,
+  "expenseID" integer,
+  "userID" integer,
+  "shares" double(7,2) NOT NULL,
   "paid" boolean NOT NULL,
-  PRIMARY KEY ("expenseID", "userID"),
+  PRIMARY KEY ("expenseID", "userID")
   FOREIGN KEY ("expenseID") REFERENCES "Expenses" ("expenseID"),
   FOREIGN KEY ("userID") REFERENCES "Users" ("userID")
 );
@@ -49,4 +50,3 @@ CREATE TABLE "Dues" (
 CREATE INDEX ON "Expenses" ("who_paid");
 
 CREATE INDEX ON "Dues" ("expenseID");
-

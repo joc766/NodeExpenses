@@ -84,14 +84,15 @@ router.post(':id/addUser/:userID', async (req, res) => {
 
 // DELETE ROUTES
 
-router.delete('/:id', async (req, res) => {
+router.delete(':id', async (req, res) => {
     const groupID = req.params.id;
     try {
-        await deleteGroup(gropuID);
+        const result = await deleteGroup(groupID);
+        return res.status(200).send('OK');
     }
     catch (err) {
         console.log(err);
-        res.status(500).send('Internal Server Error');
+        return res.status(500).send('Internal Server Error');
     }
 });
 
