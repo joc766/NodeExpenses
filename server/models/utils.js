@@ -1,12 +1,17 @@
 const pool = require('../config/db');
 
-async function getClient() {
-    const client = await pool.connect();
-    return client;
+async function getClient(cnxn) {
+    if (!cnxn) {
+        const client = await pool.connect();
+        return client;
+    } 
+    return cnxn;
 }
 
 function closeClient(client) {
-    client.release();
+    if (client) {
+        client.release();
+    }
     return
 }
 

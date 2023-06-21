@@ -1,8 +1,8 @@
 const { getClient, closeClient, makeTransaction } = require('./utils');
 const {v4: uuidv4 } = require('uuid');
 
-async function getGroup(groupID) {
-    const client = await getClient();
+async function getGroup(groupID, cnxn=null) {
+    const client = await getClient(cnxn);
     const query = `SELECT * FROM "Groups" WHERE "groupID" = $1::int`;
     const values = [ groupID ];
     try {
@@ -21,8 +21,8 @@ async function getGroup(groupID) {
     }
 };
 
-async function getGroupUsers(groupID) {
-    const client = await getClient();
+async function getGroupUsers(groupID, cnxn=null) {
+    const client = await getClient(cnxn);
     const query = `SELECT u.* FROM "Users" u NATURAL JOIN "User_Groups" ug WHERE ug."groupID" = $1::int`;
     const values = [ groupID ];
     try {
@@ -37,8 +37,8 @@ async function getGroupUsers(groupID) {
     }
 };
 
-async function getGroupExpenses(groupID) {
-    const client = await getClient();
+async function getGroupExpenses(groupID, cnxn=null) {
+    const client = await getClient(cnxn);
     const checkQuery = `SELECT * FROM "Groups" WHERE "groupID" = $1::int;`;
     const values = [groupID];
     try {
@@ -69,9 +69,9 @@ async function getGroupExpenses(groupID) {
 };
 
 // TODO double check that groups auto-receive an ID
-async function addGroup(name) {
+async function addGroup(name, cnxn=null) {
     // TODO TEMP FIX NOT GOOD
-    const client = await getClient();
+    const client = await getClient(cnxn);
     try {
         const checkQuery = `SELECT MAX("groupID") FROM "Groups";`
         const checkResult = await makeTransaction(client, checkQuery, []);
@@ -97,11 +97,11 @@ async function addGroup(name) {
 
 };
 
-async function addGroupUser(groupID, userID) {
+async function addGroupUser(groupID, userID, cnxn=null) {
     // TODO should really be throwing multiple different types of errors here so we can display a message
     // need to learn how to catch specific errors here
     // Query: INSERT INTO User_Groups (groupID, userID) VALUES (:groupID, :userID)
-    const client = await getClient();
+    const client = await getClient(cnxn);
     try {
         const checkQuery1 = `SELECT * FROM "Groups" WHERE "groupID" = $1::int;`;
         const checkQuery2 = `SELECT * FROM "Users" WHERE "userID" = $1::int;`;
@@ -136,9 +136,9 @@ async function addGroupUser(groupID, userID) {
     }
 };
 
-async function deleteGroup(groupID) {
+async function deleteGroup(groupID, cnxn=null) {
     // TODO MAKE SURE THE GROUP EXISTS
-    const client = getClient();
+    const client = getClient(cnxn);
     try {
         const query = `DELETE FROM "Groups" WHERE "groupID" = $1;`;
         const values = [ groupID ];
@@ -159,9 +159,9 @@ async function deleteGroup(groupID) {
     }
 }
 
-async function deleteGroupUser(groupID, userID) {
+async function deleteGroupUser(groupID, userID, cnxn=null) {
     // TODO MAKE SURE THE USER EXISTS IN THE GROUP
-    const client = await getClient();
+    const client = await getClient(cnxn);
     try {
         const query = `DELETE FROM "User_Groups" WHERE "groupID" = $1 AND "userID" = $2;`;
         const values = [ groupID, userID ];
