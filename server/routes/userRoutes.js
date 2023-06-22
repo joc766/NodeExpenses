@@ -2,12 +2,13 @@ const express = require('express');
 const { admin } = require('../config/firebaseAdmin');
 const { getUser, getUserExpenses, getUserGroups, getUserDebt, payDebtor, addUser, deleteUser } = require('../models/userModel');
 const {v4: uuidv4 } = require('uuid');
+const { withErrorHandling } = require('./utils');
 
 const router = express.Router();
 
 // GET REQUESTS
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', withErrorHandling(async (req, res) => {
     const userID = req.params.id;
     try {
         const user = await getUser(userID);
@@ -20,9 +21,9 @@ router.get('/:id', async (req, res) => {
         console.log(err);
         res.status(500).send('Internal Server Error')
     }
-});
+}));
 
-router.get('/:id/expenses', async (req, res) => {
+router.get('/:id/expenses', withErrorHandling(async (req, res) => {
     const userID = req.params.id;
     const unpaidOnly = req.query.unpaidOnly;
     try {
@@ -36,9 +37,9 @@ router.get('/:id/expenses', async (req, res) => {
         console.log(err);
         res.status(500).send('Internal Server Error');
     }
-});
+}));
 
-router.get('/:id/groups', async (req, res) => {
+router.get('/:id/groups', withErrorHandling(async (req, res) => {
     const userID = req.params.id;
     try {
         const groups = await getUserGroups(userID);
@@ -51,9 +52,9 @@ router.get('/:id/groups', async (req, res) => {
         console.log(err);
         res.status(500).send('Internal Server Error');
     }
-});
+}));
 
-router.get('/:id/debt', async (req, res) => {
+router.get('/:id/debt', withErrorHandling(async (req, res) => {
     const userID = req.params.id;
     const debtorID = req.query.debtor;
     try {
@@ -67,11 +68,11 @@ router.get('/:id/debt', async (req, res) => {
         console.log(err);
         res.status(500).send('Internal Server Error');
     }
-});
+}));
 
 // PUT REQUESTS
 
-router.put('/:id/payAll/:debtorID', async (req, res) => {
+router.put('/:id/payAll/:debtorID', withErrorHandling(async (req, res) => {
     // pay all of a user's debts to person X
     const userID = req.params.id;
     const debtorID = req.params.debtorID;
@@ -84,11 +85,11 @@ router.put('/:id/payAll/:debtorID', async (req, res) => {
     }
 
     res.status(200).send('OK');
-});
+}));
 
 // POST REQUESTS
 
-router.post('/', async (req, res) => {
+router.post('/', withErrorHandling(async (req, res) => {
 
     var { email, name, venmo } = req.body;
     if (!email || !name || !venmo) {
@@ -106,9 +107,9 @@ router.post('/', async (req, res) => {
         console.log(err)
         return res.status(500).send('Internal Server Error')
     }
-});
+}));
 
-router.post('/register', async (req, res) => {
+router.post('/register', withErrorHandling(async (req, res) => {
     const { name, email, password, venmo } = req.body;
     try {
       var user = await admin.auth().createUser({
@@ -135,11 +136,11 @@ router.post('/register', async (req, res) => {
         console.log(err)
         return res.status(500).send('Internal Server Error');
     }
-});
+}));
 
 // DELETE ROUTES
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', withErrorHandling(async (req, res) => {
     const userID = req.params.id;
     try {
         // COMMENT BACK WHEN WE'RE FULLY USING FIREBASE AUTH
@@ -159,6 +160,6 @@ router.delete('/:id', async (req, res) => {
         console.log(err)
         return res.status(500).send('Internal Server Error');
     }
-});
+}));
 
 module.exports = router;

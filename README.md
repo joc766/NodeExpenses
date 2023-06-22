@@ -354,6 +354,10 @@ Shared Expenses v2 using PERN stack
 
 ## Database Documentation
 
+### ALL OF THE DATABASE DATES ARE BASED ON THE DATE IT WAS IN GMT 
+
+### TODO MAYBE I SHOULD CHANGE THAT SYSTEM ^^^
+
 ### Commands to access 
 
 - docker exec -it 1538c7fc6978 psql -U jackoconnor -d expenses
