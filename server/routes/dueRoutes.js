@@ -1,22 +1,17 @@
 const express = require('express');
 const { payDue } = require('../models/dueModel');
+const { withErrorHandling } = require('./utils')
 
 const router = express.Router()
 
-router.put('/:id/pay', async (req, res) => {
+router.put('/:id/pay', withErrorHandling(async (req, res) => {
     const dueID = req.params.id;
-    try {
-        const result = await payDue(dueID);
-        if (!result) {
-            return res.status(404).send('Due not found');
-        }
-        res.json(result);
+    const result = await payDue(dueID);
+    if (!result) {
+        return res.status(404).send('Due not found');
     }
-    catch (err) {
-        console.log(err);
-        res.status(500).send('Internal Server Error')
-    }
-});
+    res.json(result);
+}));
 
 
 module.exports = router

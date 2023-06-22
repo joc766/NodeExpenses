@@ -66,7 +66,7 @@ process.on('SIGTERM', handleShutdown);
 // const httpsServer = https.createServer(credentials, app);
 
 // Stop the server but as a promise
-function stopServer() {
+function stopServer(server) {
   return new Promise((resolve, reject) => {
     server.close(err => {
       if (err) {

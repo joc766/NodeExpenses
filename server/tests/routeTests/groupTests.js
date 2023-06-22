@@ -1,20 +1,10 @@
 const request = require('supertest');
-const { startServer, stopServer } = require('../app'); // Import the startServer and stopServer functions
-const mockGroups = require('../models/__mocks__/mockGroups.json');
-const mockDueExpenses = require('../models/__mocks__/mockDueExpenses.json');
-const mockUserGroups = require('../models/__mocks__/mockUserGroups.json');
+const { startServer, stopServer } = require('../../app'); // Import the startServer and stopServer functions
+const mockGroups = require('../../models/__mocks__/mockGroups.json');
+const mockDueExpenses = require('../../models/__mocks__/mockDueExpenses.json');
+const mockUserGroups = require('../../models/__mocks__/mockUserGroups.json');
 
-jest.mock('../models/groupModel'); // Mock the groupModel module
-
-describe('Group Routes', () => {
-  let server;
-  beforeAll(() => {
-    server = startServer(); // Start the server before running the tests
-  });
-
-  afterAll(() => {
-    return stopServer(); // Stop the server after the tests are completed
-  });
+const groupTests = (server) => describe('Group Routes', () => {
 
   // GET /groups/:id
   it('GET /groups/:id -- should return a group object', async () => {
@@ -87,3 +77,5 @@ describe('Group Routes', () => {
   //   expect(response.body).toEqual(expectedGroup);
   //   });
 });
+
+module.exports = groupTests

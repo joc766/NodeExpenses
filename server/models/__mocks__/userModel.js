@@ -3,6 +3,7 @@ const mockDueExpenses = require('./mockDueExpenses.json');
 const mockUserGroups = require('./mockUserGroups.json');
 
 async function getUser(userID) {
+    console.log("MOCK HERE");
     if (userID != 1) {
         return null;
     }

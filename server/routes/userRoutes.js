@@ -10,103 +10,66 @@ const router = express.Router();
 
 router.get('/:id', withErrorHandling(async (req, res) => {
     const userID = req.params.id;
-    try {
-        const user = await getUser(userID);
-        if (!user) {
-            return res.status(404).send('User not found');
-        }
-        res.json(user);
+    const user = await getUser(userID);
+    if (!user) {
+        return res.status(404).send('User not found');
     }
-    catch (err) {
-        console.log(err);
-        res.status(500).send('Internal Server Error')
-    }
+    res.json(user);
 }));
 
 router.get('/:id/expenses', withErrorHandling(async (req, res) => {
     const userID = req.params.id;
     const unpaidOnly = req.query.unpaidOnly;
-    try {
-        const expenses = await getUserExpenses(userID, unpaidOnly);
-        if (!expenses) {
-            return res.status(404).send('Client Error: User does not exist or has no expenses');
-        }
-        res.json(expenses);
+    const expenses = await getUserExpenses(userID, unpaidOnly);
+    if (!expenses) {
+        return res.status(404).send('Client Error: User does not exist or has no expenses');
     }
-    catch (err) {
-        console.log(err);
-        res.status(500).send('Internal Server Error');
-    }
+    res.json(expenses);
 }));
 
 router.get('/:id/groups', withErrorHandling(async (req, res) => {
     const userID = req.params.id;
-    try {
-        const groups = await getUserGroups(userID);
-        if (!groups) {
-            return res.status(404).send('Client Error: User does not exist or has no groups');
-        }
-        res.json(groups);
+    const groups = await getUserGroups(userID);
+    if (!groups) {
+        return res.status(404).send('Client Error: User does not exist or has no groups');
     }
-    catch (err) {
-        console.log(err);
-        res.status(500).send('Internal Server Error');
-    }
+    res.json(groups);
 }));
 
 router.get('/:id/debt', withErrorHandling(async (req, res) => {
     const userID = req.params.id;
     const debtorID = req.query.debtor;
-    try {
-        const debt = await getUserDebt(userID, debtorID);
-        if (!debt) {
-            return res.status(404).send('Client Error: User does not exist or has no debt');
-        }
-        res.json(debt);
+    const debt = await getUserDebt(userID, debtorID);
+    if (!debt) {
+        return res.status(404).send('Client Error: User does not exist or has no debt');
     }
-    catch (err) {
-        console.log(err);
-        res.status(500).send('Internal Server Error');
-    }
+    res.json(debt);
 }));
 
 // PUT REQUESTS
 
 router.put('/:id/payAll/:debtorID', withErrorHandling(async (req, res) => {
-    // pay all of a user's debts to person X
     const userID = req.params.id;
     const debtorID = req.params.debtorID;
-    try {
-        await payDebtor(userID, debtorID);
-    }
-    catch (err) {
-        console.log(err);
-        res.status(500).send('Internal Server Error');
-    }
-
+    await payDebtor(userID, debtorID);
+    
     res.status(200).send('OK');
 }));
 
 // POST REQUESTS
 
 router.post('/', withErrorHandling(async (req, res) => {
-
     var { email, name, venmo } = req.body;
     if (!email || !name || !venmo) {
         return res.status(400).send('Client Error: Bad Request');
     }
 
-    try {
-        const newUser = await addUser(email, name, venmo);
-        if (!newUser) {
-            return res.status(500).send('Failed to create new user');
-        }
-        return res.json(newUser);
+    const newUser = await addUser(email, name, venmo);
+    if (!newUser) {
+        return res.status(500).send('Failed to create new user');
     }
-    catch (err) {
-        console.log(err)
-        return res.status(500).send('Internal Server Error')
-    }
+
+    return res.json(newUser);
 }));
 
 router.post('/register', withErrorHandling(async (req, res) => {

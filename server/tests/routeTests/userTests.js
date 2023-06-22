@@ -1,24 +1,9 @@
 const request = require('supertest');
-const { startServer, stopServer } = require('../app'); // Import the startServer and stopServer functions
-const mockUsers = require('../models/__mocks__/mockUsers.json');
-const mockDueExpenses = require('../models/__mocks__/mockDueExpenses.json');
-const mockUserGroups = require('../models/__mocks__/mockUserGroups.json');
+const mockUsers = require('../../models/__mocks__/mockUsers.json');
+const mockDueExpenses = require('../../models/__mocks__/mockDueExpenses.json');
+const mockUserGroups = require('../../models/__mocks__/mockUserGroups.json');
 
-jest.mock('../models/userModel'); // Mock the userModel module
-
-let server;
-
-describe('User Routes', () => {
-
-  beforeAll(() => {
-    server = startServer(); // Start the server before running the tests
-  });
-
-
-  afterAll(() => {
-    return stopServer();
-  });
-
+const userTests = (server) => describe('User Routes', () => {
   // GET /user/:id
   it('GET /user/:id -- should return a user object', async () => {
     const expectedUser = mockUsers.find(user => user.userID == 1);
@@ -136,3 +121,6 @@ describe('User Routes', () => {
     expect(response.body).toEqual(expectedUser);
   });
 });
+
+
+module.exports = userTests
