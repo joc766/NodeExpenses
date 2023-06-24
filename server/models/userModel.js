@@ -1,7 +1,6 @@
 const { makeTransaction } = require('./utils');
 
 async function getUser(userID) {
-  console.log("HERE");
   const query = `SELECT * FROM "Users" WHERE "userID" = $1`;
   const values = [ userID ];
   const result = await makeTransaction(query, values);

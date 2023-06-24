@@ -1,6 +1,7 @@
-const { getClient, closeClient, makeTransaction } = require('./utils');
+const { makeTransaction } = require('./utils');
 const { getUser } = require('./userModel');
 const {v4: uuidv4 } = require('uuid');
+const pool = require('../config/db');
 
 async function getGroup(groupID) {
     const query = `SELECT * FROM "Groups" WHERE "groupID" = $1::int`;
@@ -48,7 +49,8 @@ async function addGroup(name) {
 
     const result = await makeTransaction(query, values);
 
-    return result.rows[0];
+    // return result.rows[0];
+    return
 };
 
 async function addGroupUser(groupID, userID) {
@@ -71,48 +73,47 @@ async function addGroupUser(groupID, userID) {
 };
 
 async function deleteGroup(groupID) {
-    // TODO MAKE SURE THE GROUP EXISTS
+    const client = await pool.connect();
     try {
-        const query = `DELETE FROM "Groups" WHERE "groupID" = $1;`;
-        const values = [ groupID ];
-        try {
-            const result = await makeTransaction(client, query, values);
-            return result
-        }
-        catch (err) {
-            console.log(err);
-            throw err;
-        }
-    }
+        await client.query('BEGIN');
+    
+        // Step 1: Retrieve the expenseIDs associated with the groupID
+        const expenseIdsResult = await client.query(
+          'DELETE FROM "Group_Expenses" WHERE "groupID" = $1 RETURNING "expenseID";',
+          [groupID]
+        );
+        const expenseIds = expenseIdsResult.rows.map((row) => row.expenseID);
+    
+        // Step 2: Delete the Dues associated with the expenseIDs
+        await client.query('DELETE FROM "Dues" WHERE "expenseID" = ANY($1);', [expenseIds]);
+    
+        // Step 3: Delete the Expenses associated with the expenseIDs
+        await client.query('DELETE FROM "Expenses" WHERE "expenseID" = ANY($1);', [expenseIds]);
+
+        // Step 4: Delete the User_Groups associated with thte groupID
+        await client.query('DELETE FROM "User_Groups" WHERE "groupID" = $1;', [groupID])
+    
+        // Step 5: Delete the Group itself
+        await client.query('DELETE FROM "Groups" WHERE "groupID" = $1;', [groupID]);
+    
+        await client.query('COMMIT');
+        // console.log('Group and associated Expenses and Dues deleted successfully.');
+      }
     catch (err) {
+        client.query('ROLLBACK');
+        console.error('Error deleting group and associated Expenses and Dues:', err);
         throw err;
     }
     finally {
-        closeClient(client);
+        client.release();
     }
 }
 
-async function deleteGroupUser(groupID, userID, cnxn=null) {
-    // TODO MAKE SURE THE USER EXISTS IN THE GROUP
-    const client = await getClient(cnxn);
-    try {
-        const query = `DELETE FROM "User_Groups" WHERE "groupID" = $1 AND "userID" = $2;`;
-        const values = [ groupID, userID ];
-        try {
-            const result = await makeTransaction(client, query, values);
-            return result;
-        }
-        catch (err) {
-            console.log(err);
-            throw err;
-        }
-    }
-    catch (err) {
-        throw err;
-    }
-    finally {
-        closeClient(client);
-    }
+async function deleteGroupUser(groupID, userID) {
+    const query = `DELETE FROM "User_Groups" WHERE "groupID" = $1 AND "userID" = $2;`;
+    const values = [ groupID, userID ];
+    const result = await makeTransaction(query, values);
+    return result;
 }
 
 

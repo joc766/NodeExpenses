@@ -1,4 +1,3 @@
-const { Type } = require("protobufjs");
 
 
 function decoratorUtility(decoratorFn) {

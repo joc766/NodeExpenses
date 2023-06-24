@@ -3,15 +3,14 @@ const mockDueExpenses = require('./mockDueExpenses.json');
 const mockUserGroups = require('./mockUserGroups.json');
 
 async function getUser(userID) {
-    console.log("MOCK HERE");
-    if (userID != 1) {
+    if (userID > 5) {
         return null;
     }
     return mockUsers.find(user => user.userID == userID);
 };
 
 async function getUserExpenses(userID, unpaidOnly = null) {
-    if (userID != 1) {
+    if (userID > 5) {
         return null;
     }
     var result = mockDueExpenses.filter(expense => expense.userID == userID)
@@ -22,14 +21,14 @@ async function getUserExpenses(userID, unpaidOnly = null) {
 }
 
 async function getUserGroups(userID) {
-    if (userID != 1) {
+    if (userID > 5) {
         return null;
     }
     return mockUserGroups.filter(group => group.userID == userID)
 }
 
 async function getUserDebt(userID, debtorID) {
-    if (userID != 1) {
+    if (userID > 5) {
         return null;
     }
     var expectedUnpaid = mockDueExpenses.filter(expense => expense.userID == userID && expense.paid === false);

@@ -9,7 +9,6 @@ jest.mock('../models/groupModel'); // Mock the userModel module
 let server;
 
 afterAll(async () => {
-    console.log("STOPPING");
     await stopServer(server); // Stop the server after the tests are completed
     return
 });

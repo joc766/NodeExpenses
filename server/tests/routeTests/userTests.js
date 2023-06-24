@@ -101,7 +101,10 @@ const userTests = (server) => describe('User Routes', () => {
   });
 
   it('POST /user -- Bad request should have a 400 error', async () => {
-    const response = await request(server).post('/user').send({});
+    const response = await request(server).post('/user')
+      .send({})
+      .set('Accept', 'application/json')
+      .set('Content-Type', 'application/json');
     expect(response.status).toBe(400);
     expect(response.text).toBe('Client Error: Bad Request');
   });
