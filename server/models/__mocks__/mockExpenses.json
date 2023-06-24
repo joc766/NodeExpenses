@@ -1,0 +1,33 @@
+[
+    {
+      "expenseID": 1,
+      "title": "Expense 1",
+      "amount": 120.00,
+      "descrip": "Description 1",
+      "who_paid": 1,
+      "n_shares": 2,
+      "date": "2023-05-01",
+      "groupID": 1
+    },
+    {
+      "expenseID": 2,
+      "title": "Expense 2",
+      "amount": 75.00,
+      "descrip": "Description 2",
+      "who_paid": 2,
+      "n_shares": 2,
+      "date": "2023-05-02",
+      "groupID": 2
+    },
+    {
+      "expenseID": 3,
+      "title": "Expense 3",
+      "amount": 60.50,
+      "descrip": "Description 3",
+      "who_paid": 3,
+      "n_shares": 2,
+      "date": "2023-05-03",
+      "groupID": 3
+    }
+]
+  
