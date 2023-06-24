@@ -271,8 +271,12 @@ Shared Expenses v2 using PERN stack
     ```json
     {
       "id": 1,
+      "title": "Expense 1",
       "description": "Expense 1",
-      "amount": 10.5
+      "amount": 75,
+      "who_paid": 1,
+      "n_shares": 3,
+      "date": 2023-05-02
     }
     ```
 
