@@ -294,11 +294,13 @@ Shared Expenses v2 using PERN stack
       {
         "id": 1,
         "name": "John Doe",
+        "venmo": "johnDoe1",
         "email": "john@example.com"
       },
       {
         "id": 2,
         "name": "Jane Smith",
+        "venmo": "janesmith1",
         "email": "jane@example.com"
       }
     ]
