@@ -16,7 +16,7 @@ router.get('/:id', withErrorHandling(async (req, res) => {
         return res.status(404).send('Expense does not exist');
     }
     return res.json(expenseInfo);
-}));
+}, `GET /expense/:id`));
 
 router.get('/:id/contributors', withErrorHandling(async (req, res) => {
     const expenseID = req.params.id;
@@ -25,7 +25,7 @@ router.get('/:id/contributors', withErrorHandling(async (req, res) => {
         return res.status(404).send('Expense does not exist');
     }
     return res.json(expenseContributors);
-}));
+}, 'GET /expense/:id/contributors'));
 
 // POST ROUTES
 
@@ -41,18 +41,18 @@ router.post('/', withErrorHandling(async (req, res) => {
     }, []);
     const newExpense = addExpense(groupID, title, amount, descrip, who_paid, date, shares);
     return res.status(200).send('OK');
-}));
+}, 'POST /expense'));
 
 // DELETE ROUTES
 
-router.get('/delete/:id', withErrorHandling(async (req, res) => {
+router.delete('/:id', withErrorHandling(async (req, res) => {
     const expenseID = req.params.id;
     if (!await getExpense(expenseID)) {
         return res.status(400).send('Expense does not exist');
     }
     await deleteExpense(expenseID);
     return res.status(200).send('OK');
-}));
+}, 'DELETE /:id'));
 
 
 module.exports = router

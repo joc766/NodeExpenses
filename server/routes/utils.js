@@ -6,14 +6,14 @@ function decoratorUtility(decoratorFn) {
     };
 }
 
-function withErrorHandling(fn) {
+function withErrorHandling(fn, routeOrigin="No origin") {
     return async function() {
         try {
           return await fn.apply(this, arguments);
         } catch (error) {
             let res = arguments[1]
             res.status(500).send('Internal Server Error');
-            console.error('Error:', error);
+            console.error(`${routeOrigin}: `, error);
         }
     };
 }

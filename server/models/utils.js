@@ -5,8 +5,8 @@ async function makeTransaction(query, values) {
         var result = await pool.query(query, values);
     }
     catch (err) {
-        console.log(err);
-        throw err;
+        const errorMessage = `Caught in makeTransaction:\n\n${err.message}`
+        throw new Error(errorMessage);
     }
     return result;
 }

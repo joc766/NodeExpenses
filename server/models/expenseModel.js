@@ -52,7 +52,7 @@ async function addExpense(groupID, title, amt, descrip, who_paid, date, shares) 
         return
     }
     catch (err) {
-        console.log("ROLLED BACK");
+        console.log('ROLLED BACK');
         client.query('ROLLBACK');
         throw err;
     }

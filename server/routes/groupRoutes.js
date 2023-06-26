@@ -14,7 +14,7 @@ router.get('/:id', withErrorHandling(async (req, res) => {
         return res.status(404).send('Group not found');
     }
     return res.json(group);
-}));
+}, 'GET /group/:id'));
 
 router.get('/:id/users', withErrorHandling(async (req, res) => {
     const groupID = req.params.id;
@@ -23,7 +23,7 @@ router.get('/:id/users', withErrorHandling(async (req, res) => {
         return res.status(404).send('Group does not exist or has no users');
     }
     return res.json(groupUsers);    
-}));
+}, 'GET /group/:id/users'));
 
 router.get('/:id/expenses', withErrorHandling(async (req, res) => {
     const groupID = req.params.id;
@@ -32,7 +32,7 @@ router.get('/:id/expenses', withErrorHandling(async (req, res) => {
         return res.status(404).send('Group does not exist');
     }
     return res.json(groupXpns);
-}));
+}, 'GET /group/:id/expenses'));
 
 // POST REQUESTS
 
@@ -47,7 +47,7 @@ router.post('/', withErrorHandling(async (req, res) => {
     // TODO deal with emailing initialMembers
     const newGroup = await addGroup(groupName);
     return res.status(200).send('OK')
-}));
+}, 'POST /group'));
 
 router.post('/:id/addUser', withErrorHandling(async (req, res) => {
     const groupID = req.params.id;
@@ -64,7 +64,7 @@ router.post('/:id/addUser', withErrorHandling(async (req, res) => {
     }
     const userGroup = await addGroupUser(groupID, userID);
     return res.status(200).send('OK');
-}));
+}, 'POST /group/:id/addUser'));
 
 // DELETE ROUTES
 
@@ -75,7 +75,7 @@ router.delete('/:id', withErrorHandling(async (req, res) => {
     }
     const result = await deleteGroup(groupID);
     return res.status(200).send('OK');
-}));
+}, 'DELETE /group/:id'));
 
 router.delete('/:groupID/removeUser/:userID', withErrorHandling(async (req, res) => {
     const { groupID, userID } = req.params;
@@ -87,7 +87,7 @@ router.delete('/:groupID/removeUser/:userID', withErrorHandling(async (req, res)
     }
     const result = await deleteGroupUser(groupID, userID);
     return res.status(200).send('OK');
-}));
+}, 'DELETE /group/:groupID/removeUser/:userID'));
 
 
 module.exports = router

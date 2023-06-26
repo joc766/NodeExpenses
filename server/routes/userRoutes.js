@@ -15,7 +15,7 @@ router.get('/:id', withErrorHandling(async (req, res) => {
         return res.status(404).send('User not found');
     }
     res.json(user);
-}));
+}, 'GET /user/:id'));
 
 router.get('/:id/expenses', withErrorHandling(async (req, res) => {
     const userID = req.params.id;
@@ -25,7 +25,7 @@ router.get('/:id/expenses', withErrorHandling(async (req, res) => {
         return res.status(404).send('Client Error: User does not exist or has no expenses');
     }
     res.json(expenses);
-}));
+}, 'GET /user/:id/expenses'));
 
 router.get('/:id/groups', withErrorHandling(async (req, res) => {
     const userID = req.params.id;
@@ -34,7 +34,7 @@ router.get('/:id/groups', withErrorHandling(async (req, res) => {
         return res.status(404).send('Client Error: User does not exist or has no groups');
     }
     res.json(groups);
-}));
+}, 'GET /user/:id/groups'));
 
 router.get('/:id/debt', withErrorHandling(async (req, res) => {
     const userID = req.params.id;
@@ -44,7 +44,7 @@ router.get('/:id/debt', withErrorHandling(async (req, res) => {
         return res.status(404).send('Client Error: User does not exist or has no debt');
     }
     res.json(debt);
-}));
+}, 'GET /user/:id/debt'));
 
 // PUT REQUESTS
 
@@ -54,7 +54,7 @@ router.put('/:id/payAll/:debtorID', withErrorHandling(async (req, res) => {
     await payDebtor(userID, debtorID);
     
     res.status(200).send('OK');
-}));
+}, 'PUT /user/:id/payAll/:debtorID'));
 
 // POST REQUESTS
 
@@ -65,7 +65,7 @@ router.post('/', withErrorHandling(async (req, res) => {
     }
     const newUser = await addUser(email, name, venmo);
     return res.json(newUser);
-}));
+}, 'POST /user'));
 
 router.post('/register', withErrorHandling(async (req, res) => {
     const { name, email, password, venmo } = req.body;
@@ -94,7 +94,7 @@ router.post('/register', withErrorHandling(async (req, res) => {
         console.log(err)
         return res.status(500).send('Internal Server Error');
     }
-}));
+}, 'POST /user/register'));
 
 // DELETE ROUTES
 
@@ -118,6 +118,6 @@ router.delete('/:id', withErrorHandling(async (req, res) => {
         console.log(err)
         return res.status(500).send('Internal Server Error');
     }
-}));
+}, 'DELETE /user/:id'));
 
 module.exports = router;
