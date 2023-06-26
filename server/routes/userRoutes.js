@@ -63,12 +63,7 @@ router.post('/', withErrorHandling(async (req, res) => {
     if (!email || !name || !venmo) {
         return res.status(400).send('Client Error: Bad Request');
     }
-
     const newUser = await addUser(email, name, venmo);
-    if (!newUser) {
-        return res.status(500).send('Failed to create new user');
-    }
-
     return res.json(newUser);
 }));
 

@@ -1,48 +1,50 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE "Users" (
-  "userID" integer PRIMARY KEY,
+  "userID" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   "email" varchar(40),
   "user_name" varchar(20),
   "venmo" varchar(30) UNIQUE
 );
 
 CREATE TABLE "Groups" (
-  "groupID" integer PRIMARY KEY,
+  "groupID" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   "group_name" varchar(30) NOT NULL
 );
 
 CREATE TABLE "User_Groups" (
-  "userID" integer,
-  "groupID" integer,
+  "userID" uuid,
+  "groupID" uuid,
   PRIMARY KEY ("userID", "groupID"),
   FOREIGN KEY ("userID") REFERENCES "Users" ("userID"),
   FOREIGN KEY ("groupID") REFERENCES "Groups" ("groupID")
 );
 
 CREATE TABLE "Expenses" (
-  "expenseID" integer PRIMARY KEY,
+  "expenseID" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   "title" varchar(40),
-  "amount" double(7,2),
+  "amount" decimal(7,2),
   "descrip" text,
-  "who_paid" integer,
+  "who_paid" uuid,
   "n_shares" integer,
   "date" date,
   FOREIGN KEY ("who_paid") REFERENCES "Users" ("userID")
 );
 
 CREATE TABLE "Group_Expenses" (
-  "groupID" integer,
-  "expenseID" integer,
+  "groupID" uuid,
+  "expenseID" uuid,
   PRIMARY KEY ("groupID", "expenseID"),
   FOREIGN KEY ("groupID") REFERENCES "Groups" ("groupID"),
   FOREIGN KEY ("expenseID") REFERENCES "Expenses" ("expenseID")
 );
 
 CREATE TABLE "Dues" (
-  "expenseID" integer,
-  "userID" integer,
-  "shares" double(7,2) NOT NULL,
+  "expenseID" uuid,
+  "userID" uuid,
+  "shares" decimal(7,2) NOT NULL,
   "paid" boolean NOT NULL,
-  PRIMARY KEY ("expenseID", "userID")
+  PRIMARY KEY ("expenseID", "userID"),
   FOREIGN KEY ("expenseID") REFERENCES "Expenses" ("expenseID"),
   FOREIGN KEY ("userID") REFERENCES "Users" ("userID")
 );

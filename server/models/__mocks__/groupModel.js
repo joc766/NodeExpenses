@@ -53,7 +53,6 @@ async function addGroupUser(groupID, userID) {
 };
 
 async function deleteGroup(groupID) {
-    console.log(groupID);
     if (groupID > 3) {
         throw Error;
     }

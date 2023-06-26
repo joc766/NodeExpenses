@@ -10,16 +10,6 @@
       "groupID": 1
     },
     {
-      "expenseID": 2,
-      "title": "Expense 2",
-      "amount": 75.00,
-      "descrip": "Description 2",
-      "who_paid": 2,
-      "n_shares": 2,
-      "date": "2023-05-02",
-      "groupID": 2
-    },
-    {
       "expenseID": 3,
       "title": "Expense 3",
       "amount": 60.50,

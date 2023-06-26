@@ -1,4 +1,5 @@
 const { makeTransaction } = require('./utils');
+const { v4: uuidv4 } = require('uuid');
 
 async function getUser(userID) {
   const query = `SELECT * FROM "Users" WHERE "userID" = $1`;
@@ -16,25 +17,15 @@ async function getUserExpenses(userID, unpaidOnly = null) {
     values.push(unpaidOnly);
   }
   query += ` ORDER BY "date";`;
-  try {
-    const result = await makeTransaction(query, values);
-    return result.rows;
-  }
-  catch (err) {
-    throw err;
-  }
+  const result = await makeTransaction(query, values);
+  return result.rows;
 };
 
 async function getUserGroups(userID) {
   const query = `SELECT g.* FROM "Groups" g NATURAL JOIN "User_Groups" WHERE "userID" = $1::int`;
   const values = [ Number(userID) ];
-  try {
-    const result = await makeTransaction(query, values);
-    return result.rows;
-  }
-  catch (err) {
-    throw err;
-  }
+  const result = await makeTransaction(query, values);
+  return result.rows;
 };
 
 async function getUserDebt(userID, debtorID) {
@@ -45,61 +36,29 @@ async function getUserDebt(userID, debtorID) {
     values.push(Number(debtorID));
   }
   query += `;`;
-  try {
-    const result = await makeTransaction(query, values);
-    return result.rows[0]
-  }
-  catch (err) {
-    throw err;
-  }
+  const result = await makeTransaction(query, values);
+  return result.rows[0]
 };
 
 async function payDebtor(userID, debtorID) {
   const query = `UPDATE "Dues" SET "paid" = true WHERE "userID" = $1::int AND "who_paid" = $2::int`;
   const values = [ Number(userID), Number(debtorID) ];
-  try {
-    const result = await makeTransaction(query, values);
-    return result.rows[0]
-  }
-  catch (err) {
-    throw err;
-  }
+  const result = await makeTransaction(query, values);
+  return result.rows[0];
 }
 
-async function addUser(email, name, venmo, userID = null) {
-  let cols;
-  let val_placeholders;
-  let values;
-  if (userID === null) {
-    cols = "(\"email\", \"name\", \"venmo\")";
-    val_placeholders = "($1, $2, $3)";
-    values = [ email, name, venmo ];
-  }
-  else {
-    cols = "(\"userID\", \"email\", \"name\", \"venmo\")";
-    val_placeholders = "($1, $2, $3, $4)";
-    values = [ userID, email, name, venmo ];
-  }
-  const query = `INSERT INTO "Users" ${cols} VALUES ${val_placeholders}`;
-  try {
-    const result = await makeTransaction(query, values);
-    return result.rows[0]
-  }
-  catch (err) {
-    throw err;
-  }
+async function addUser(email, name, venmo) {
+  const query = `INSERT INTO "Users" ("email", "name", "venmo") VALUES ($1, $2, $3)`;
+  const values = [ email, name, venmo ];
+  const result = await makeTransaction(query, values);
+  return result.rows[0];
 }
 
 async function deleteUser(userID) {
   const query = `DELETE FROM "Users" WHERE "userID" = $1::int`;
   const values = [ Number(userID) ];
-  try {
-    const result = await makeTransaction(query, values);
-    return result.rows[0]
-  }
-  catch (err) {
-    throw err;
-  }
+  const result = await makeTransaction(query, values);
+  return result.rows[0];
 }
   
 module.exports = {

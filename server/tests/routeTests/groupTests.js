@@ -1,5 +1,4 @@
 const request = require('supertest');
-const { startServer, stopServer } = require('../../app'); // Import the startServer and stopServer functions
 const mockGroups = require('../../models/__mocks__/mockGroups.json');
 const mockDueExpenses = require('../../models/__mocks__/mockDueExpenses.json');
 const mockUserGroups = require('../../models/__mocks__/mockUserGroups.json');

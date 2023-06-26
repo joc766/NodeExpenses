@@ -8,6 +8,8 @@ ENV POSTGRES_DB expenses
 
 # Copy any initialization scripts or configuration files
 COPY schema.sql /docker-entrypoint-initdb.d/
+COPY dummy_data.sql /dummy_data.sql
+COPY reset.sql /reset.sql
 
 # Expose the PostgreSQL port
 EXPOSE 5432

@@ -18,7 +18,7 @@ async function getGroup(groupID) {
 };
 
 async function getGroupUsers(groupID) {
-    const query = `SELECT u.* FROM "Users" u NATURAL JOIN "User_Groups" ug WHERE ug."groupID" = $1::int`;
+    const query = `SELECT u.* FROM "Users" u NATURAL JOIN "User_Groups" ug WHERE ug."groupID" = $1`;
     const values = [ groupID ];
 
     const result = await makeTransaction(query, values);
@@ -39,17 +39,9 @@ async function getGroupExpenses(groupID) {
 
 // TODO double check that groups auto-receive an ID
 async function addGroup(name) {
-    // TODO TEMP FIX NOT GOOD
-    const checkQuery = `SELECT MAX("groupID") FROM "Groups";`
-    const checkResult = await makeTransaction(checkQuery, []);
-    const newId = checkResult.rows[0]["max"] + 1;
-
-    const query = `INSERT INTO "Groups" ("groupID", group_name) VALUES ($1::int, $2);`;
+    const query = `INSERT INTO "Groups" ("group_name") VALUES ($2);`;
     const values = [ newId, name ];
-
     const result = await makeTransaction(query, values);
-
-    // return result.rows[0];
     return
 };
 
