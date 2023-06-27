@@ -1,20 +1,26 @@
 const pool = require('../config/db');
+const { makeTransaction } = require('./utils');
 
 async function searchUsers(q) {
-    // TODO
-    // Query: SELECT * FROM Users WHERE name LIKE 'q%' OR email LIKE 'q%' OR venmo LIKE q%;
+    const query = `SELECT * FROM "Users" WHERE "user_name" LIKE $1 OR email LIKE $1 OR venmo LIKE $1;`;
+    const values = [ `${q}%` ];
+    const result = await makeTransaction(query, values);
+    return result.rows;
 }
 
 async function searchExpenses(q) {
-    // TODO 
-    // Query: SELECT * FROM Expenses WHERE title LIKE 'q%' OR description LIKE 'q%';
+    const query = `SELECT * FROM "Expenses" WHERE "title" LIKE $1;`;
+    const values = [ `${q}%` ];
+    const result = await makeTransaction(query, values);
+    return result.rows;
 
 }
 
 async function searchGroups(q) {
-    // TODO
-    // Query: SELECT * FROM Groups WHERE name LIKE 'q%';
-
+    const query = `SELECT * FROM "Groups" WHERE "group_name" LIKE $1;`;
+    const values = [ `${q}%` ];
+    const result = await makeTransaction(query, values);
+    return result.rows;
 }
 
 
