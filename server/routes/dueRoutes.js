@@ -1,17 +1,26 @@
 const express = require('express');
-const { payDue } = require('../models/dueModel');
+const { getDue, payDue, unpayDue } = require('../models/dueModel');
 const { withErrorHandling } = require('./utils')
 
 const router = express.Router()
 
-router.put('/:id/pay', withErrorHandling(async (req, res) => {
-    const dueID = req.params.id;
-    const result = await payDue(dueID);
-    if (!result) {
-        return res.status(404).send('Due not found');
+router.put('/pay/:expenseID/:userID', withErrorHandling(async (req, res) => {
+    const {expenseID, userID} = req.params;
+    if (!await getDue(expenseID, userID)) {
+        return res.status(404).send('Due does not exist');
     }
-    res.json(result);
-}));
+    const result = await payDue(expenseID, userID);
+    return res.status(200).send('OK');
+}, 'PUT /dues/pay'));
+
+router.put('/unpay/:expenseID/:userID', withErrorHandling(async (req, res) => {
+    const {expenseID, userID} = req.params;
+    if (!await getDue(expenseID, userID)) {
+        return res.status(404).send('Due does not exist');
+    }
+    const result = await unpayDue(expenseID, userID);
+    return res.status(200).send('OK');
+}, 'PUT /dues/unpay'));
 
 
 module.exports = router

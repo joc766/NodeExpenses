@@ -3,10 +3,12 @@ const { startServer, stopServer } = require('../app');
 const userTests = require('./routeTests/userTests');
 const groupTests = require('./routeTests/groupTests');
 const expenseTests = require('./routeTests/expenseTests');
+const dueTests = require('./routeTests/dueTests');
 
 jest.mock('../models/userModel'); // Mock the userModel module
 jest.mock('../models/groupModel'); // Mock the groupModel module
 jest.mock('../models/expenseModel'); // Mock the expenseModel module
+jest.mock('../models/dueModel.js'); // Mock the dueModel module
 
 let server;
 
@@ -22,4 +24,5 @@ describe('Sequentially run tests', () => {
     userTests(server);
     groupTests(server);
     expenseTests(server);
+    dueTests(server);
 })
