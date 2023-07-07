@@ -15,7 +15,7 @@ const expenseRoutes = require('./routes/expenseRoutes');
 const dueRoutes = require('./routes/dueRoutes');
 const searchRoutes = require('./routes/searchRoutes');
 
-const port = 3000
+const port = 8080
 
 // Read the SSL/TLS certificate and private key files
 // const privateKey = fs.readFileSync(path.join(__dirname, 'private-key.pem'), 'utf8');
@@ -79,7 +79,12 @@ function stopServer(server) {
 }
 
 // Start the server
-function startServer() {
+async function startServer() {
+  // test query
+  pool.query(`SELECT * FROM "Users" LIMIT 10`)
+    .then((res) => console.log("TEST QUERY SUCCESS"))
+    .catch((err) => console.log(err))
+
   server = app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
   });

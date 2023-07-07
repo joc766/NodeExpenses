@@ -12,8 +12,8 @@ function withErrorHandling(fn, routeOrigin="No origin") {
           return await fn.apply(this, arguments);
         } catch (error) {
             let res = arguments[1]
-            res.status(500).send('Internal Server Error');
             console.error(`${routeOrigin}: `, error);
+            return res.status(500).send('Internal Server Error');
         }
     };
 }

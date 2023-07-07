@@ -1,5 +1,9 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+CREATE TYPE cents AS (
+  amount decimal(7,2)
+);
+
 CREATE TABLE "Users" (
   "userID" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   "email" varchar(40),
@@ -23,7 +27,7 @@ CREATE TABLE "User_Groups" (
 CREATE TABLE "Expenses" (
   "expenseID" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   "title" varchar(40),
-  "amount" decimal(7,2),
+  "amount" cents,
   "descrip" text,
   "who_paid" uuid,
   "n_shares" integer,
